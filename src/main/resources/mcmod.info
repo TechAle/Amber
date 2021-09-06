@@ -1,0 +1,15 @@
+[
+{
+  "modid": "tempest",
+  "name": "Tempest",
+  "description": "1.12.2 Utility Mod for Forge",
+  "version": "0.1.0",
+  "mcversion": "1.12.2",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["A2H", "Hoosiers", "lukflug", "Reap", "techale"],
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

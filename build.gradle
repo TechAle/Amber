@@ -1,0 +1,97 @@
+buildscript {
+    ext.kotlin_version = '1.4.30'
+    repositories {
+        maven { url = 'https://files.minecraftforge.net/maven' }
+        jcenter()
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:3.+'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.github.jengelman.gradle.plugins:shadow:5.2.0'
+    }
+}
+        
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'kotlin'
+apply plugin: "com.github.johnrengelman.shadow"
+apply plugin: 'eclipse'
+
+version = project.modVersion
+group = project.modGroup
+archivesBaseName = project.modName
+
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+
+minecraft {
+    mappings channel: 'stable', version: '39-1.12'
+    
+    runs {
+        client {
+            workingDirectory project.file('run')
+
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+        }
+    }
+}
+
+//techale totally pasted this in from Kami Blue via suggestion of Xiaro... thanks!
+//need this to ensure mac support
+configurations {
+    all {
+        resolutionStrategy {
+            force 'org.lwjgl.lwjgl:lwjgl-platform:2.9.4-nightly-20150209'
+        }
+    }
+}
+
+dependencies {
+    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2854'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+}
+
+shadowJar {
+    dependencies {
+        include(dependency('org.jetbrains.kotlin:kotlin-stdlib'))
+    }
+    exclude 'dummyThing'
+    exclude 'LICENSE.txt'
+}
+
+reobf {
+	shadowJar {
+		classpath = sourceSets.main.compileClasspath
+	}
+}
+
+jar {
+    manifest {
+        attributes([
+            "Specification-Title": "",
+            "Specification-Vendor": project.modName,
+            "Specification-Version": project.modVersion,
+            "Implementation-Title": project.name,
+            "Implementation-Version": "${version}",
+            "Implementation-Vendor" : project.modName,
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+build.dependsOn(shadowJar)
