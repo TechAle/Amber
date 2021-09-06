@@ -1,6 +1,6 @@
-package dev.tempest.client.command.commands
+package dev.amber.client.command.commands
 
-import dev.tempest.client.command.Command
+import dev.amber.client.command.Command
 
 object TestCommand : Command(name = "TestCommand", "Syntax", "tst", "gg") {
 

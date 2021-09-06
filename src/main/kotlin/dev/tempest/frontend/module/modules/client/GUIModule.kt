@@ -1,9 +1,9 @@
-package dev.tempest.client.module.modules.client
+package dev.amber.client.module.modules.client
 
-import dev.tempest.api.util.Globals.mc
-import dev.tempest.api.util.Globals.nullCheck
-import dev.tempest.client.gui.GuiScreen
-import dev.tempest.client.module.Module
+import dev.amber.api.util.Globals.mc
+import dev.amber.api.util.Globals.nullCheck
+import dev.amber.client.gui.GuiScreen
+import dev.amber.client.module.Module
 import org.lwjgl.input.Keyboard
 
 /**

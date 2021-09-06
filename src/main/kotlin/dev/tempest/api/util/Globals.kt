@@ -1,4 +1,4 @@
-package dev.tempest.api.util
+package dev.amber.api.util
 
 import net.minecraft.client.Minecraft
 

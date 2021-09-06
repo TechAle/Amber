@@ -1,8 +1,8 @@
-package dev.tempest.client.module.modules.hud
+package dev.amber.client.module.modules.hud
 
-import dev.tempest.api.util.Globals.mc
-import dev.tempest.api.util.Globals.nullCheck
-import dev.tempest.client.module.Module
+import dev.amber.api.util.Globals.mc
+import dev.amber.api.util.Globals.nullCheck
+import dev.amber.client.module.Module
 import java.awt.Color
 
 /**

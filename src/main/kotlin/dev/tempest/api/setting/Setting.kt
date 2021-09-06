@@ -1,4 +1,4 @@
-package dev.tempest.api.setting
+package dev.amber.api.setting
 
 /**
  * @author lukflug

@@ -1,6 +1,6 @@
-package dev.tempest.api.setting
+package dev.amber.api.setting
 
-import dev.tempest.client.module.Module
+import dev.amber.client.module.Module
 import java.util.stream.Stream
 
 /**

@@ -7,21 +7,19 @@ import java.lang.Integer.max
 /**
  * @author lukflug
  */
-class IntegerSetting(
+class StringSetting(
     displayName: String,
-    value: Int,
-    val min: Int,
-    val max: Int,
+    value: String,
     configName: String = displayName.replace(" ",""),
     description: String = "",
     visible: ()-> Boolean = {true}
-): Setting<Int>(displayName, value, configName, description, visible) {
+): Setting<String>(displayName, value, configName, description, visible) {
 
-    override fun setState(value: Int) {
-        super.setState(max(min(value, max(min,max)), min(min,max)))
+    override fun setState(value: String) {
+        super.setState(value)
     }
 
     override fun fromString(input: String) {
-        setState(input.toInt())
+        setState(input)
     }
 }

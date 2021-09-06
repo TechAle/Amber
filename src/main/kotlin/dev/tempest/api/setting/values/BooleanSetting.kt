@@ -1,6 +1,6 @@
-package dev.tempest.api.setting.values
+package dev.amber.api.setting.values
 
-import dev.tempest.api.setting.Setting
+import dev.amber.api.setting.Setting
 
 /**
  * @author lukflug

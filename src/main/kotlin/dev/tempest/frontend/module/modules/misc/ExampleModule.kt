@@ -1,12 +1,12 @@
-package dev.tempest.client.module.modules.misc
+package dev.amber.client.module.modules.misc
 
-import dev.tempest.api.setting.SettingManager
-import dev.tempest.api.setting.values.BooleanSetting
-import dev.tempest.api.setting.values.DoubleSetting
-import dev.tempest.api.setting.values.IntegerSetting
-import dev.tempest.api.setting.values.ModeSetting
-import dev.tempest.api.util.MessageUtil
-import dev.tempest.client.module.Module
+import dev.amber.api.setting.SettingManager
+import dev.amber.api.setting.values.BooleanSetting
+import dev.amber.api.setting.values.DoubleSetting
+import dev.amber.api.setting.values.IntegerSetting
+import dev.amber.api.setting.values.ModeSetting
+import dev.amber.api.util.MessageUtil
+import dev.amber.client.module.Module
 import org.lwjgl.input.Keyboard
 
 /**

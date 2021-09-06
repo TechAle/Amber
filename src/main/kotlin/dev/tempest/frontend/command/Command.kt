@@ -1,4 +1,4 @@
-package dev.tempest.client.command
+package dev.amber.client.command
 
 /**
  * @author Techale

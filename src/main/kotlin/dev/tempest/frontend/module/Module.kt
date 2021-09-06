@@ -1,4 +1,4 @@
-package dev.tempest.client.module
+package dev.amber.client.module
 
 import net.minecraftforge.client.event.ClientChatEvent
 import net.minecraftforge.client.event.RenderWorldLastEvent

@@ -1,16 +1,16 @@
-package dev.tempest.client
+package dev.amber.client
 
-import dev.tempest.api.event.EventManager
-import dev.tempest.client.command.CommandManager.registerCommands
-import dev.tempest.client.module.ModuleManager.registerModules
+import dev.amber.api.event.EventManager
+import dev.amber.client.command.CommandManager.registerCommands
+import dev.amber.client.module.ModuleManager.registerModules
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 
 @Suppress("UNUSED_PARAMETER")
-@Mod(modid = Tempest.MODID, name = Tempest.NAME, version = Tempest.VERSION)
-class Tempest {
+@Mod(modid = Amber.MODID, name = Amber.NAME, version = Amber.VERSION)
+class Amber {
 
     @Mod.EventHandler
     fun preInit(event: FMLPreInitializationEvent) {}
@@ -23,8 +23,8 @@ class Tempest {
     }
 
     companion object {
-        const val MODID = "tempest"
-        const val NAME = "Tempest"
+        const val MODID = "amber"
+        const val NAME = "Amber"
         const val VERSION = "0.1.0"
     }
 }

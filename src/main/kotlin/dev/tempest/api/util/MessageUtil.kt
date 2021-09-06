@@ -1,6 +1,6 @@
-package dev.tempest.api.util
+package dev.amber.api.util
 
-import dev.tempest.api.util.Globals.mc
+import dev.amber.api.util.Globals.mc
 import com.mojang.realmsclient.gui.ChatFormatting
 import net.minecraft.util.text.TextComponentString
 
@@ -10,7 +10,7 @@ import net.minecraft.util.text.TextComponentString
  */
 object MessageUtil {
 
-    private var watermark = "${ChatFormatting.GRAY}[${ChatFormatting.LIGHT_PURPLE}Tempest${ChatFormatting.GRAY}]${ChatFormatting.RESET}"
+    private var watermark = "${ChatFormatting.GRAY}[${ChatFormatting.LIGHT_PURPLE}Amber${ChatFormatting.GRAY}]${ChatFormatting.RESET}"
 
     fun sendClientMessage(message: String) {
         mc.player.sendMessage(TextComponentString("$watermark $message"))

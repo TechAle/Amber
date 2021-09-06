@@ -1,9 +1,9 @@
-package dev.tempest.client.module
+package dev.amber.client.module
 
-import dev.tempest.client.module.modules.client.GUIModule
-import dev.tempest.client.module.modules.client.HUDModule
-import dev.tempest.client.module.modules.hud.ExampleHUD
-import dev.tempest.client.module.modules.misc.ExampleModule
+import dev.amber.client.module.modules.client.GUIModule
+import dev.amber.client.module.modules.client.HUDModule
+import dev.amber.client.module.modules.hud.ExampleHUD
+import dev.amber.client.module.modules.misc.ExampleModule
 
 /**
  * @author A2H

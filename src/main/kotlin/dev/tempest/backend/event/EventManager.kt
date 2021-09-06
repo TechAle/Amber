@@ -1,9 +1,9 @@
-package dev.tempest.api.event
+package dev.amber.api.event
 
-import dev.tempest.api.util.Globals.mc
-import dev.tempest.client.command.CommandManager.onMessage
-import dev.tempest.client.module.Module
-import dev.tempest.client.module.ModuleManager.modules
+import dev.amber.api.util.Globals.mc
+import dev.amber.client.command.CommandManager.onMessage
+import dev.amber.client.module.Module
+import dev.amber.client.module.ModuleManager.modules
 import net.minecraftforge.client.event.ClientChatEvent
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.client.event.RenderWorldLastEvent
