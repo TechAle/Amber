@@ -1,6 +1,6 @@
-package dev.tempest.backend.event
+package dev.tempest.backend.events.list
 
-import dev.tempest.backend.event.core.imp.EventCancellable
+import dev.tempest.backend.events.core.imp.EventCancellable
 import net.minecraftforge.fml.common.gameevent.TickEvent
 
 class EventClientTick(

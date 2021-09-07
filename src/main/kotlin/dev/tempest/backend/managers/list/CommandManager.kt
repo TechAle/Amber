@@ -1,18 +1,21 @@
-package dev.tempest.backend.managers
+package dev.tempest.backend.managers.list
 
 import dev.amber.client.command.Command
 import dev.amber.client.command.commands.TestCommand
+import dev.tempest.api.util.timer
 import net.minecraftforge.client.event.ClientChatEvent
 
 /**
  * @author Techale
  */
-object CommandManager {
+object CommandManager : manager {
     val commands = arrayListOf<Command>()
     const val prefix = "-"
 
-    fun registerCommands() {
+    override fun onLoad() {
+        val count = timer();
         addCommand(TestCommand)
+        count.endTimer("Manager Command")
     }
 
     private fun addCommand(c : Command) {
@@ -41,4 +44,5 @@ object CommandManager {
             }
         }
     }
+
 }

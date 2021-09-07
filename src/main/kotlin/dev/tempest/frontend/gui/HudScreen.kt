@@ -1,7 +1,7 @@
 package dev.amber.client.gui
 
 import dev.amber.client.module.Module
-import dev.amber.client.module.ModuleManager.modules
+import dev.tempest.backend.managers.list.ModuleManager.modules
 import dev.amber.client.module.modules.client.HUDModule
 import net.minecraft.client.gui.GuiScreen
 import java.awt.Color

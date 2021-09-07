@@ -1,21 +1,25 @@
-package dev.amber.client.module
+package dev.tempest.backend.managers.list
 
+import dev.amber.client.module.Module
 import dev.amber.client.module.modules.client.GUIModule
 import dev.amber.client.module.modules.client.HUDModule
 import dev.amber.client.module.modules.hud.ExampleHUD
 import dev.amber.client.module.modules.misc.ExampleModule
+import dev.tempest.api.util.timer
 
 /**
  * @author A2H
  */
-object ModuleManager {
+object ModuleManager : manager {
     val modules = arrayListOf<Module>()
 
-    fun registerModules() {
+    override fun onLoad() {
+        val count = timer();
         addModule(ExampleModule)
         addModule(GUIModule)
         addModule(HUDModule)
         addModule(ExampleHUD)
+        count.endTimer("Manager Module")
     }
 
     private fun addModule(m : Module) {

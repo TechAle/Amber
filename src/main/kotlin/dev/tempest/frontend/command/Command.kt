@@ -3,7 +3,7 @@ package dev.amber.client.command
 /**
  * @author Techale
  */
-open class Command(val name: String, val syntax: String, vararg alias: String) {
+abstract class Command(val name: String, val syntax: String, vararg alias: String) {
 
     val aliasList: List<String> = alias.toList()
 

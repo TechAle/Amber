@@ -1,7 +1,7 @@
-package dev.tempest.backend.event.core
+package dev.tempest.backend.events.core
 
-import dev.tempest.backend.event.core.imp.Event
-import dev.tempest.backend.event.core.imp.Priority
+import dev.tempest.backend.events.core.imp.Event
+import dev.tempest.backend.events.core.imp.Priority
 import java.util.concurrent.CopyOnWriteArrayList
 import java.lang.IllegalAccessException
 import java.lang.IllegalArgumentException

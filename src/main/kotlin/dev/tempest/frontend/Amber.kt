@@ -1,15 +1,16 @@
 package dev.amber.client
 
-import dev.amber.client.module.ModuleManager
-import dev.amber.client.module.ModuleManager.registerModules
-import dev.tempest.backend.event.core.EventHandler
-import dev.tempest.backend.managers.CommandManager
-import dev.tempest.backend.managers.CommandManager.registerCommands
-import dev.tempest.backend.managers.EventManager
+import dev.tempest.api.util.timer
+import dev.tempest.backend.managers.list.ModuleManager
+import dev.tempest.backend.events.core.EventHandler
+import dev.tempest.backend.managers.list.CommandManager
+import dev.tempest.backend.managers.list.EventManager
+import dev.tempest.backend.managers.list.manager
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
+import java.util.logging.Logger
 
 @Suppress("UNUSED_PARAMETER")
 @Mod(modid = Amber.MODID, name = Amber.NAME, version = Amber.VERSION)
@@ -20,17 +21,23 @@ class Amber {
 
     @Mod.EventHandler
     fun init(event: FMLInitializationEvent) {
+        val time = timer()
         MinecraftForge.EVENT_BUS.register(EventManager)
-        EventHandler.register(CommandManager)
-        EventHandler.register(ModuleManager)
-        EventHandler.register(EventManager)
-        registerModules()
-        registerCommands()
+        loadManager(CommandManager)
+        loadManager(ModuleManager)
+        loadManager(EventManager)
+        time.endTimer("Init Amber")
+    }
+
+    fun loadManager(manager : manager) {
+        EventHandler.register(manager)
+        manager.onLoad()
     }
 
     companion object {
         const val MODID = "amber"
         const val NAME = "Amber"
         const val VERSION = "0.1.0"
+        val LOGGER = Logger.getLogger(NAME)
     }
 }

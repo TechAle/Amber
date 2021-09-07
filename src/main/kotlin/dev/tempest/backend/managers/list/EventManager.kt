@@ -1,12 +1,12 @@
-package dev.tempest.backend.managers
+package dev.tempest.backend.managers.list
 
 import dev.amber.api.util.Globals.mc
 import dev.amber.client.module.Module
-import dev.amber.client.module.ModuleManager.modules
-import dev.tempest.backend.event.EventClientTick
-import dev.tempest.backend.event.core.EventHandler
-import dev.tempest.backend.event.core.EventTarget
-import dev.tempest.backend.event.core.imp.Priority
+import dev.tempest.backend.managers.list.ModuleManager.modules
+import dev.tempest.backend.events.core.EventHandler
+import dev.tempest.backend.events.core.EventTarget
+import dev.tempest.backend.events.core.imp.Priority
+import dev.tempest.backend.events.list.EventClientTick
 import net.minecraftforge.client.event.ClientChatEvent
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.client.event.RenderWorldLastEvent
@@ -20,19 +20,23 @@ import org.lwjgl.input.Keyboard
  * @author A2H
  */
 @Suppress("UNUSED_PARAMETER")
-object EventManager {
+object EventManager : manager {
+
+    override fun onLoad() {
+    }
 
     @SubscribeEvent
     fun onClientTick(event: TickEvent.ClientTickEvent) {
         if (mc.player == null) return
-        //modules.filter(Module::enabled).forEach(Module::onTick)
-        EventHandler.call(EventClientTick(TickEvent.Phase.START))
+        modules.filter(Module::enabled).forEach(Module::onTick)
     }
 
+    /*
+    EventHandler.call(EventClientTick(TickEvent.Phase.START))
     @EventTarget(Priority.HIGHEST)
     fun prova(event : EventClientTick) {
-        System.out.println("")
-    }
+
+    }*/
 
 
     @SubscribeEvent
