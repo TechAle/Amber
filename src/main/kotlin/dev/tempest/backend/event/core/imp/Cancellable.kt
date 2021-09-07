@@ -1,13 +1,11 @@
-package dev.tempest.backend.event.core.imp;
+package dev.tempest.backend.event.core.imp
 
 /**
  * @author DarkMagician6
  * @since 08-27-2013
  */
+interface Cancellable {
+    fun isCancelled(): Boolean
 
-public interface Cancellable {
-
-    boolean isCancelled();
-
-    void setCancelled(boolean cancelled);
+    fun setCancelled(cancelled: Boolean)
 }

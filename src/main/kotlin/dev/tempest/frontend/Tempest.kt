@@ -1,8 +1,11 @@
 package dev.amber.client
 
-import dev.amber.api.event.EventManager
+import dev.amber.client.module.ModuleManager
 import dev.amber.client.module.ModuleManager.registerModules
+import dev.tempest.backend.event.core.EventHandler
+import dev.tempest.backend.managers.CommandManager
 import dev.tempest.backend.managers.CommandManager.registerCommands
+import dev.tempest.backend.managers.EventManager
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
@@ -18,6 +21,9 @@ class Amber {
     @Mod.EventHandler
     fun init(event: FMLInitializationEvent) {
         MinecraftForge.EVENT_BUS.register(EventManager)
+        EventHandler.register(CommandManager)
+        EventHandler.register(ModuleManager)
+        EventHandler.register(EventManager)
         registerModules()
         registerCommands()
     }

@@ -1,9 +1,12 @@
-package dev.amber.api.event
+package dev.tempest.backend.managers
 
 import dev.amber.api.util.Globals.mc
 import dev.amber.client.module.Module
 import dev.amber.client.module.ModuleManager.modules
-import dev.tempest.backend.managers.CommandManager.onMessage
+import dev.tempest.backend.event.EventClientTick
+import dev.tempest.backend.event.core.EventHandler
+import dev.tempest.backend.event.core.EventTarget
+import dev.tempest.backend.event.core.imp.Priority
 import net.minecraftforge.client.event.ClientChatEvent
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.client.event.RenderWorldLastEvent
@@ -22,12 +25,18 @@ object EventManager {
     @SubscribeEvent
     fun onClientTick(event: TickEvent.ClientTickEvent) {
         if (mc.player == null) return
-        modules.filter(Module::enabled).forEach(Module::onTick)
+        //modules.filter(Module::enabled).forEach(Module::onTick)
+        EventHandler.call(EventClientTick(TickEvent.Phase.START))
     }
+
+    @EventTarget(Priority.HIGHEST)
+    fun prova(event : EventClientTick) {
+        System.out.println("")
+    }
+
 
     @SubscribeEvent
     fun onChat(event: ClientChatEvent) {
-        onMessage(event)
     }
 
     @SubscribeEvent

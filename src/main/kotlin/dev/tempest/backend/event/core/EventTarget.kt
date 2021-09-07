@@ -1,18 +1,12 @@
-package dev.tempest.backend.event.core;
+package dev.tempest.backend.event.core
 
-import dev.tempest.backend.event.core.imp.Priority;
-
-import java.lang.annotation.*;
+import dev.tempest.backend.event.core.imp.Priority
 
 /**
  * @author DarkMagician6
  * @since 07-30-2013
  */
-
-@Documented
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface EventTarget {
-
-    byte value() default Priority.MEDIUM;
-}
+@MustBeDocumented
+@Target(AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY_GETTER, AnnotationTarget.PROPERTY_SETTER)
+@kotlin.annotation.Retention(AnnotationRetention.RUNTIME)
+annotation class EventTarget(val value: Byte = Priority.MEDIUM)

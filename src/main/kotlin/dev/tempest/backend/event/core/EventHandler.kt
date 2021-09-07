@@ -1,175 +1,132 @@
-package dev.tempest.backend.event.core;
+package dev.tempest.backend.event.core
 
-import dev.amber.client.Amber;
-import dev.tempest.backend.event.core.imp.Event;
-import dev.tempest.backend.event.core.imp.Priority;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
+import dev.tempest.backend.event.core.imp.Event
+import dev.tempest.backend.event.core.imp.Priority
+import java.util.concurrent.CopyOnWriteArrayList
+import java.lang.IllegalAccessException
+import java.lang.IllegalArgumentException
+import java.lang.reflect.InvocationTargetException
+import java.lang.reflect.Method
+import java.util.HashMap
 
 /**
  * @author DarkMagician6
  * @since 02-02-2014
  */
-
-@SuppressWarnings("unused")
-public final class EventHandler {
-
-    private final HashMap<Class<? extends Event>, List<MethodData>> REGISTRY_MAP = new HashMap<>();
-
-    public EventHandler() {
-        //Amber.INSTANCE.LOGGER.info("EventHandler");
-    }
-
-    public void register(Object object) {
-        for (final Method method : object.getClass().getDeclaredMethods()) {
+object EventHandler {
+    private val REGISTRY_MAP = HashMap<Class<out Event>, MutableList<MethodData>>()
+    fun register(`object`: Any) {
+        for (method in `object`.javaClass.declaredMethods) {
             if (!isMethodBad(method)) {
-                register(method, object);
+                register(method, `object`)
             }
         }
     }
 
-    public void register(Object object, Class<? extends Event> eventClass) {
-        for (final Method method : object.getClass().getDeclaredMethods()) {
+    fun register(`object`: Any, eventClass: Class<out Event>) {
+        for (method in `object`.javaClass.declaredMethods) {
             if (!isMethodBad(method, eventClass)) {
-                register(method, object);
+                register(method, `object`)
             }
         }
     }
 
-    public void unregister(Object object) {
-        for (final List<MethodData> dataList : this.REGISTRY_MAP.values()) {
-            dataList.removeIf(data -> data.getSource().equals(object));
+    fun unregister(`object`: Any) {
+        for (dataList in REGISTRY_MAP.values) {
+            dataList.removeIf { data: MethodData -> data.source == `object` }
         }
-
-        cleanMap(true);
+        cleanMap(true)
     }
 
-    public void unregister(Object object, Class<? extends Event> eventClass) {
-        if (this.REGISTRY_MAP.containsKey(eventClass)) {
-            this.REGISTRY_MAP.get(eventClass).removeIf(data -> data.getSource().equals(object));
-
-            cleanMap(true);
+    fun unregister(`object`: Any, eventClass: Class<out Event>) {
+        if (REGISTRY_MAP.containsKey(eventClass)) {
+            REGISTRY_MAP[eventClass]!!.removeIf { data: MethodData -> data.source == `object` }
+            cleanMap(true)
         }
     }
 
-    @SuppressWarnings("unchecked")
-    private void register(Method method, Object object) {
-        Class<? extends Event> indexClass = (Class<? extends Event>) method.getParameterTypes()[0];
-
-        final MethodData data = new MethodData(object, method, method.getAnnotation(EventTarget.class).value());
-
-        if (!data.getTarget().isAccessible()) {
-            data.getTarget().setAccessible(true);
+    private fun register(method: Method, `object`: Any) {
+        val indexClass = method.parameterTypes[0] as Class<out Event>
+        val data = MethodData(`object`, method, method.getAnnotation(EventTarget::class.java).value)
+        if (!data.target.isAccessible) {
+            data.target.isAccessible = true
         }
-
-        if (this.REGISTRY_MAP.containsKey(indexClass)) {
-            if (!this.REGISTRY_MAP.get(indexClass).contains(data)) {
-                this.REGISTRY_MAP.get(indexClass).add(data);
-                sortListValue(indexClass);
+        if (REGISTRY_MAP.containsKey(indexClass)) {
+            if (!REGISTRY_MAP[indexClass]!!.contains(data)) {
+                REGISTRY_MAP[indexClass]!!.add(data)
+                sortListValue(indexClass)
             }
         } else {
-            this.REGISTRY_MAP.put(indexClass, new CopyOnWriteArrayList<MethodData>() {
-                private static final long serialVersionUID = 666L;
+            REGISTRY_MAP.put(indexClass, object : CopyOnWriteArrayList<MethodData>() {
+                private val serialVersionUID = 666L
 
-                {
-                    add(data);
+                init {
+                    add(data)
                 }
-            });
+            })
         }
     }
 
-    public void removeEntry(Class<? extends Event> indexClass) {
-        Iterator<Map.Entry<Class<? extends Event>, List<MethodData>>> mapIterator = this.REGISTRY_MAP.entrySet().iterator();
-
+    fun removeEntry(indexClass: Class<out Event?>) {
+        val mapIterator: MutableIterator<Map.Entry<Class<out Event>, List<MethodData>>> = REGISTRY_MAP.entries.iterator()
         while (mapIterator.hasNext()) {
-            if (mapIterator.next().getKey().equals(indexClass)) {
-                mapIterator.remove();
-                break;
+            if (mapIterator.next().key == indexClass) {
+                mapIterator.remove()
+                break
             }
         }
     }
 
-    public void cleanMap(boolean onlyEmptyEntries) {
-        Iterator<Map.Entry<Class<? extends Event>, List<MethodData>>> mapIterator = this.REGISTRY_MAP.entrySet().iterator();
-
+    fun cleanMap(onlyEmptyEntries: Boolean) {
+        val mapIterator: MutableIterator<Map.Entry<Class<out Event>, List<MethodData>>> = REGISTRY_MAP.entries.iterator()
         while (mapIterator.hasNext()) {
-            if (!onlyEmptyEntries || mapIterator.next().getValue().isEmpty()) {
-                mapIterator.remove();
+            if (!onlyEmptyEntries || mapIterator.next().value.isEmpty()) {
+                mapIterator.remove()
             }
         }
     }
 
-    private void sortListValue(Class<? extends Event> indexClass) {
-        List<MethodData> sortedList = new CopyOnWriteArrayList<>();
-
-        for (final byte priority : Priority.VALUE_ARRAY) {
-            for (final MethodData data : this.REGISTRY_MAP.get(indexClass)) {
-                if (data.getPriority() == priority) {
-                    sortedList.add(data);
+    private fun sortListValue(indexClass: Class<out Event>) {
+        val sortedList: MutableList<MethodData> = CopyOnWriteArrayList()
+        for (priority in Priority.VALUE_ARRAY) {
+            for (data in REGISTRY_MAP[indexClass]!!) {
+                if (data.priority == priority) {
+                    sortedList.add(data)
                 }
             }
         }
-
-        this.REGISTRY_MAP.put(indexClass, sortedList);
+        REGISTRY_MAP[indexClass] = sortedList
     }
 
-    private boolean isMethodBad(Method method) {
-        return method.getParameterTypes().length != 1 || !method.isAnnotationPresent(EventTarget.class);
+    private fun isMethodBad(method: Method): Boolean {
+        return method.parameterTypes.size != 1 || !method.isAnnotationPresent(EventTarget::class.java)
     }
 
-    private boolean isMethodBad(Method method, Class<? extends Event> eventClass) {
-        return isMethodBad(method) || !method.getParameterTypes()[0].equals(eventClass);
+    private fun isMethodBad(method: Method, eventClass: Class<out Event>): Boolean {
+        return isMethodBad(method) || method.parameterTypes[0] != eventClass
     }
 
-    @SuppressWarnings("UnusedReturnValue")
-    public Event call(final Event event) {
-        List<MethodData> dataList = this.REGISTRY_MAP.get(event.getClass());
-
+    fun call(event: Event): Event {
+        val dataList: List<MethodData>? = REGISTRY_MAP[event.javaClass]
         if (dataList != null) {
-            for (final MethodData data : dataList) {
-                invoke(data, event);
+            for (data in dataList) {
+                invoke(data, event)
             }
         }
-
-        return event;
+        return event
     }
 
-    private void invoke(MethodData data, Event argument) {
+    private operator fun invoke(data: MethodData, argument: Event) {
         try {
-            data.getTarget().invoke(data.getSource(), argument);
-        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-            e.printStackTrace();
+            data.target.invoke(data.source, argument)
+        } catch (e: IllegalAccessException) {
+            e.printStackTrace()
+        } catch (e: IllegalArgumentException) {
+            e.printStackTrace()
+        } catch (e: InvocationTargetException) {
+            e.printStackTrace()
         }
     }
 
-    private static final class MethodData {
-
-        private final Object source;
-        private final Method target;
-        private final byte priority;
-
-        public MethodData(Object source, Method target, byte priority) {
-            this.source = source;
-            this.target = target;
-            this.priority = priority;
-        }
-
-        public Object getSource() {
-            return this.source;
-        }
-
-        public Method getTarget() {
-            return this.target;
-        }
-
-        public byte getPriority() {
-            return this.priority;
-        }
-    }
+    private class MethodData(val source: Any, val target: Method, val priority: Byte)
 }

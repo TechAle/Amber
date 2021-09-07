@@ -1,23 +1,20 @@
-package dev.tempest.backend.event.core.imp;
+package dev.tempest.backend.event.core.imp
 
 /**
  * @author DarkMagician6
  * @since 08-03-2013
  */
-
-public final class Priority {
-
-    public static final byte HIGHEST = 0;
-    public static final byte HIGH = 1;
-    public static final byte MEDIUM = 2;
-    public static final byte LOW = 3;
-    public static final byte LOWEST = 4;
-
-    public static final byte[] VALUE_ARRAY = new byte[]{
+object Priority {
+    const val HIGHEST: Byte = 0
+    const val HIGH: Byte = 1
+    const val MEDIUM: Byte = 2
+    const val LOW: Byte = 3
+    const val LOWEST: Byte = 4
+    val VALUE_ARRAY = byteArrayOf(
             HIGHEST,
             HIGH,
             MEDIUM,
             LOW,
             LOWEST
-    };
+    )
 }
