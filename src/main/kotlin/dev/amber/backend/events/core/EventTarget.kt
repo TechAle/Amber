@@ -1,6 +1,6 @@
-package dev.tempest.backend.events.core
+package dev.amber.backend.events.core
 
-import dev.tempest.backend.events.core.imp.Priority
+import dev.amber.backend.events.core.imp.Priority
 
 /**
  * @author DarkMagician6

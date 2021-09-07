@@ -1,11 +1,11 @@
 package dev.amber.client
 
-import dev.tempest.api.util.timer
-import dev.tempest.backend.managers.list.ModuleManager
-import dev.tempest.backend.events.core.EventHandler
-import dev.tempest.backend.managers.list.CommandManager
-import dev.tempest.backend.managers.list.EventManager
-import dev.tempest.backend.managers.list.manager
+import dev.amber.api.util.timer
+import dev.amber.backend.managers.list.ModuleManager
+import dev.amber.backend.events.core.EventHandler
+import dev.amber.backend.managers.list.CommandManager
+import dev.amber.backend.managers.list.EventManager
+import dev.amber.backend.managers.list.manager
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent

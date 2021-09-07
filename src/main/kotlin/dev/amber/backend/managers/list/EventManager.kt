@@ -1,13 +1,10 @@
-package dev.tempest.backend.managers.list
+package dev.amber.backend.managers.list
 
 import dev.amber.api.util.Globals.mc
 import dev.amber.client.module.Module
-import dev.tempest.backend.managers.list.ModuleManager.modules
-import dev.tempest.backend.events.core.EventHandler
-import dev.tempest.backend.events.core.EventTarget
-import dev.tempest.backend.events.core.imp.Priority
-import dev.tempest.backend.events.list.EventClientTick
-import dev.tempest.backend.events.list.EventMessage
+import dev.amber.backend.managers.list.ModuleManager.modules
+import dev.amber.backend.events.core.EventHandler
+import dev.amber.backend.events.list.EventMessage
 import net.minecraftforge.client.event.ClientChatEvent
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.client.event.RenderWorldLastEvent

@@ -1,11 +1,11 @@
-package dev.tempest.backend.managers.list
+package dev.amber.backend.managers.list
 
 import dev.amber.client.module.Module
 import dev.amber.client.module.modules.client.GUIModule
 import dev.amber.client.module.modules.client.HUDModule
 import dev.amber.client.module.modules.hud.ExampleHUD
 import dev.amber.client.module.modules.misc.ExampleModule
-import dev.tempest.api.util.timer
+import dev.amber.api.util.timer
 
 /**
  * @author A2H

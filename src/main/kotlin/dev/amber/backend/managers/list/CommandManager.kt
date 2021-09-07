@@ -1,13 +1,11 @@
-package dev.tempest.backend.managers.list
+package dev.amber.backend.managers.list
 
 import dev.amber.client.command.Command
 import dev.amber.client.command.commands.TestCommand
-import dev.tempest.api.util.timer
-import dev.tempest.backend.events.core.EventTarget
-import dev.tempest.backend.events.core.imp.Priority
-import dev.tempest.backend.events.list.EventClientTick
-import dev.tempest.backend.events.list.EventMessage
-import net.minecraftforge.client.event.ClientChatEvent
+import dev.amber.api.util.timer
+import dev.amber.backend.events.core.EventTarget
+import dev.amber.backend.events.core.imp.Priority
+import dev.amber.backend.events.list.EventMessage
 
 /*
     @author TechAle

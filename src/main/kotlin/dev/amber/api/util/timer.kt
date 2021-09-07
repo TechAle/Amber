@@ -1,4 +1,4 @@
-package dev.tempest.api.util
+package dev.amber.api.util
 
 import dev.amber.client.Amber
 

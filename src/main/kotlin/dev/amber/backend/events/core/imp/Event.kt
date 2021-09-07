@@ -1,4 +1,4 @@
-package dev.tempest.backend.events.core.imp
+package dev.amber.backend.events.core.imp
 
 /**
  * @author DarkMagician6
