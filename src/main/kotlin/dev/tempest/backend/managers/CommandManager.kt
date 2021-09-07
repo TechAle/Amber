@@ -1,5 +1,6 @@
-package dev.amber.client.command
+package dev.tempest.backend.managers
 
+import dev.amber.client.command.Command
 import dev.amber.client.command.commands.TestCommand
 import net.minecraftforge.client.event.ClientChatEvent
 

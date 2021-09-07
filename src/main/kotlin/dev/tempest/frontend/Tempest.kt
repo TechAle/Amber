@@ -1,8 +1,8 @@
 package dev.amber.client
 
 import dev.amber.api.event.EventManager
-import dev.amber.client.command.CommandManager.registerCommands
 import dev.amber.client.module.ModuleManager.registerModules
+import dev.tempest.backend.managers.CommandManager.registerCommands
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent

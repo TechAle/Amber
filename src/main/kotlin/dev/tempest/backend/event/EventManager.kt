@@ -1,9 +1,9 @@
 package dev.amber.api.event
 
 import dev.amber.api.util.Globals.mc
-import dev.amber.client.command.CommandManager.onMessage
 import dev.amber.client.module.Module
 import dev.amber.client.module.ModuleManager.modules
+import dev.tempest.backend.managers.CommandManager.onMessage
 import net.minecraftforge.client.event.ClientChatEvent
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.client.event.RenderWorldLastEvent
@@ -27,8 +27,6 @@ object EventManager {
 
     @SubscribeEvent
     fun onChat(event: ClientChatEvent) {
-        if (mc.player == null) return
-        modules.filter(Module::enabled).forEach { it.onMessage(event) }
         onMessage(event)
     }
 

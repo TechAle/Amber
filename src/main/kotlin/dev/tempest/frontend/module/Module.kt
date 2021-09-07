@@ -29,7 +29,5 @@ open class Module(val category: Category, val name : String) {
 
     open fun onRender() {}
 
-    open fun onMessage(event: ClientChatEvent) {}
-
     open fun onWorldRender(event: RenderWorldLastEvent) {}
 }
