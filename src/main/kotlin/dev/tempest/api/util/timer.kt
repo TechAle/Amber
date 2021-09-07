@@ -2,7 +2,12 @@ package dev.tempest.api.util
 
 import dev.amber.client.Amber
 
-class timer() {
+/*
+    @author TechAle
+    @since 07/09/21
+ */
+
+class timer {
 
     val start = System.currentTimeMillis();
 

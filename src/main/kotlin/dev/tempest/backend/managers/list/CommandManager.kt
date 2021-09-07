@@ -5,8 +5,9 @@ import dev.amber.client.command.commands.TestCommand
 import dev.tempest.api.util.timer
 import net.minecraftforge.client.event.ClientChatEvent
 
-/**
- * @author Techale
+/*
+    @author TechAle
+    @since 07/09/21
  */
 object CommandManager : manager {
     val commands = arrayListOf<Command>()

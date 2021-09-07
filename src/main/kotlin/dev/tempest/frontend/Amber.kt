@@ -12,6 +12,11 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import java.util.logging.Logger
 
+/*
+    @author TechAle
+    @since 07/09/21
+ */
+
 @Suppress("UNUSED_PARAMETER")
 @Mod(modid = Amber.MODID, name = Amber.NAME, version = Amber.VERSION)
 class Amber {

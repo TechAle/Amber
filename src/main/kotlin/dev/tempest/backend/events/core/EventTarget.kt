@@ -5,6 +5,7 @@ import dev.tempest.backend.events.core.imp.Priority
 /**
  * @author DarkMagician6
  * @since 07-30-2013
+ * Translated to kotlin by TechAle
  */
 @MustBeDocumented
 @Target(AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY_GETTER, AnnotationTarget.PROPERTY_SETTER)

@@ -12,6 +12,7 @@ import java.util.HashMap
 /**
  * @author DarkMagician6
  * @since 02-02-2014
+ * Translated to kotlin by TechAle
  */
 object EventHandler {
     private val REGISTRY_MAP = HashMap<Class<out Event>, MutableList<MethodData>>()

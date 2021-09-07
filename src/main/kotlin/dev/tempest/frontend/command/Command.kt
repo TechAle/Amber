@@ -1,7 +1,8 @@
 package dev.amber.client.command
 
-/**
- * @author Techale
+/*
+    @author TechAle
+    @since 07/09/21
  */
 abstract class Command(val name: String, val syntax: String, vararg alias: String) {
 

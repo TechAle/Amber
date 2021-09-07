@@ -3,6 +3,7 @@ package dev.tempest.backend.events.core.imp
 /**
  * @author DarkMagician6
  * @since 08-03-2013
+ * Translated to kotlin by TechAle
  */
 object Priority {
     const val HIGHEST: Byte = 0
