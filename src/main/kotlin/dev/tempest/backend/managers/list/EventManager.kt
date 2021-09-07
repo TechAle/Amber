@@ -7,6 +7,7 @@ import dev.tempest.backend.events.core.EventHandler
 import dev.tempest.backend.events.core.EventTarget
 import dev.tempest.backend.events.core.imp.Priority
 import dev.tempest.backend.events.list.EventClientTick
+import dev.tempest.backend.events.list.EventMessage
 import net.minecraftforge.client.event.ClientChatEvent
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.client.event.RenderWorldLastEvent
@@ -41,6 +42,8 @@ object EventManager : manager {
 
     @SubscribeEvent
     fun onChat(event: ClientChatEvent) {
+        EventHandler.call(EventMessage(event))
+
     }
 
     @SubscribeEvent

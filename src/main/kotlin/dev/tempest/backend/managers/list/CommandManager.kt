@@ -3,6 +3,10 @@ package dev.tempest.backend.managers.list
 import dev.amber.client.command.Command
 import dev.amber.client.command.commands.TestCommand
 import dev.tempest.api.util.timer
+import dev.tempest.backend.events.core.EventTarget
+import dev.tempest.backend.events.core.imp.Priority
+import dev.tempest.backend.events.list.EventClientTick
+import dev.tempest.backend.events.list.EventMessage
 import net.minecraftforge.client.event.ClientChatEvent
 
 /*
@@ -23,25 +27,27 @@ object CommandManager : manager {
         commands.add(c)
     }
 
-    fun onMessage(event: ClientChatEvent) {
-        val msg = event.message
+    @EventTarget(Priority.HIGHEST)
+    fun prova(event : EventMessage) {
+        val msg = event.message.message
 
         if (msg.startsWith(prefix)) {
-            event.isCanceled = true
+            event.message.isCanceled = true
 
             val command = msg.split(" ")[0].drop(1)
-            var found = true
+            var found = false
 
             commands.forEach {
                 if (it.aliasList.contains(command)) {
                     it.onCommand(msg.split(" ").drop(1))
-                    found = false
+                    found = true
                     return@forEach
                 }
             }
             // If not found
-            if (found) {
-
+            if (!found) {
+                // Message help
+                System.out.println("Nothing found")
             }
         }
     }
