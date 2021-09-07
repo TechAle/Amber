@@ -3,30 +3,29 @@ package dev.amber.backend.mixin;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-/*
+
 import org.spongepowered.asm.launch.MixinBootstrap;
 import org.spongepowered.asm.mixin.MixinEnvironment;
-import org.spongepowered.asm.mixin.Mixins;*/
+import org.spongepowered.asm.mixin.Mixins;
 
 import java.util.Map;
 
-@IFMLLoadingPlugin.Name("LambdaMixinLoader")
+@IFMLLoadingPlugin.Name("AmberMixinLoader")
 @IFMLLoadingPlugin.MCVersion("1.12.2")
 public class AmberMixinLoader implements IFMLLoadingPlugin {
 
     /* This is NOT using LambdaMod, as importing it causes the issue described here: https://github.com/SpongePowered/Mixin/issues/388 */
-    public static final Logger log = LogManager.getLogger("Lambda");
+    public static final Logger log = LogManager.getLogger("Amber");
     private static boolean isObfuscatedEnvironment = false;
 
     public AmberMixinLoader() {
         log.info("Amber init mixin...");
-        /*
         MixinBootstrap.init();
-        Mixins.addConfiguration("mixins.gamesense.json");
+        Mixins.addConfiguration("mixins.amber.json");
         MixinEnvironment.getDefaultEnvironment().setObfuscationContext("searge");
-        log.info(MixinEnvironment.getDefaultEnvironment().getObfuscationContext());*/
+        log.info(MixinEnvironment.getDefaultEnvironment().getObfuscationContext());
     }
-    // -Dfml.coreMods.load=com.gamesense.mixin.GameSenseMixinLoader
+    // -Dfml.coreMods.load=dev.amber.backend.mixin.AmberMixinLoader
     @Override
     public String[] getASMTransformerClass() {
         return new String[0];
