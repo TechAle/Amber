@@ -1,8 +1,8 @@
 package dev.amber.backend.managers.list
 
+import dev.amber.api.util.LOGGER
 import dev.amber.client.command.Command
 import dev.amber.client.command.commands.TestCommand
-import dev.amber.api.util.timer
 import dev.amber.backend.events.core.EventTarget
 import dev.amber.backend.events.core.imp.Priority
 import dev.amber.backend.events.list.EventMessage
@@ -16,9 +16,9 @@ object CommandManager : manager {
     const val prefix = "-"
 
     override fun onLoad() {
-        val count = timer();
+        LOGGER.startTimer("Command Manager")
         addCommand(TestCommand)
-        count.endTimer("Manager Command")
+        LOGGER.endTimer("Command Manager")
     }
 
     private fun addCommand(c : Command) {

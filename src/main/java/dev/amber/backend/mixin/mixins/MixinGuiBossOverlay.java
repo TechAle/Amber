@@ -11,6 +11,6 @@ public class MixinGuiBossOverlay {
 
     @Inject(method = "renderBossHealth", at = @At("HEAD"), cancellable = true)
     private void renderBossHealth(CallbackInfo callbackInfo) {
-        callbackInfo.cancel();
+        //callbackInfo.cancel();
     }
 }

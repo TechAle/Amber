@@ -16,39 +16,39 @@ import java.util.HashMap
  */
 object EventHandler {
     private val REGISTRY_MAP = HashMap<Class<out Event>, MutableList<MethodData>>()
-    fun register(`object`: Any) {
-        for (method in `object`.javaClass.declaredMethods) {
+    fun register(obj: Any) {
+        for (method in obj.javaClass.declaredMethods) {
             if (!isMethodBad(method)) {
-                register(method, `object`)
+                register(method, obj)
             }
         }
     }
 
-    fun register(`object`: Any, eventClass: Class<out Event>) {
-        for (method in `object`.javaClass.declaredMethods) {
+    fun register(obj: Any, eventClass: Class<out Event>) {
+        for (method in obj.javaClass.declaredMethods) {
             if (!isMethodBad(method, eventClass)) {
-                register(method, `object`)
+                register(method, obj)
             }
         }
     }
 
-    fun unregister(`object`: Any) {
+    fun unregister(obj: Any) {
         for (dataList in REGISTRY_MAP.values) {
-            dataList.removeIf { data: MethodData -> data.source == `object` }
+            dataList.removeIf { data: MethodData -> data.source == obj }
         }
         cleanMap(true)
     }
 
-    fun unregister(`object`: Any, eventClass: Class<out Event>) {
+    fun unregister(obj: Any, eventClass: Class<out Event>) {
         if (REGISTRY_MAP.containsKey(eventClass)) {
-            REGISTRY_MAP[eventClass]!!.removeIf { data: MethodData -> data.source == `object` }
+            REGISTRY_MAP[eventClass]!!.removeIf { data: MethodData -> data.source == obj }
             cleanMap(true)
         }
     }
 
-    private fun register(method: Method, `object`: Any) {
+    private fun register(method: Method, obj: Any) {
         val indexClass = method.parameterTypes[0] as Class<out Event>
-        val data = MethodData(`object`, method, method.getAnnotation(EventTarget::class.java).value)
+        val data = MethodData(obj, method, method.getAnnotation(EventTarget::class.java).value)
         if (!data.target.isAccessible) {
             data.target.isAccessible = true
         }

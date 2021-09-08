@@ -1,6 +1,6 @@
 package dev.amber.client
 
-import dev.amber.api.util.timer
+import dev.amber.api.util.LOGGER
 import dev.amber.backend.managers.list.ModuleManager
 import dev.amber.backend.events.core.EventHandler
 import dev.amber.backend.managers.list.CommandManager
@@ -26,12 +26,12 @@ class Amber {
 
     @Mod.EventHandler
     fun init(event: FMLInitializationEvent) {
-        val time = timer()
+        LOGGER.startTimer("Init Amber")
         MinecraftForge.EVENT_BUS.register(EventManager)
         loadManager(CommandManager)
         loadManager(ModuleManager)
         loadManager(EventManager)
-        time.endTimer("Init Amber")
+        LOGGER.endTimer("Init Amber")
     }
 
     fun loadManager(manager : manager) {
@@ -43,6 +43,5 @@ class Amber {
         const val MODID = "amber"
         const val NAME = "Amber"
         const val VERSION = "0.1.0"
-        val LOGGER = Logger.getLogger(NAME)
     }
 }

@@ -10,6 +10,11 @@ import org.spongepowered.asm.mixin.Mixins;
 
 import java.util.Map;
 
+/*
+    @author: Lambda
+    @source: https://github.com/lambda-client/lambda/blob/master/src/main/java/com/lambda/client/mixin/MixinLoaderForge.java
+ */
+
 @IFMLLoadingPlugin.Name("AmberMixinLoader")
 @IFMLLoadingPlugin.MCVersion("1.12.2")
 public class AmberMixinLoader implements IFMLLoadingPlugin {

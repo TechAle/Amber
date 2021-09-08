@@ -5,12 +5,13 @@ package dev.amber.backend.events.list
     @since 07/09/21
  */
 
+import dev.amber.backend.events.core.imp.Event
 import dev.amber.backend.events.core.imp.EventCancellable
 import net.minecraftforge.client.event.ClientChatEvent
 
 class EventMessage(
         text : ClientChatEvent
-) : EventCancellable() {
+) : Event {
     val message = text
 
 }
