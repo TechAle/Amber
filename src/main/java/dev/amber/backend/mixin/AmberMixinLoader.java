@@ -23,9 +23,10 @@ public class AmberMixinLoader implements IFMLLoadingPlugin {
         MixinBootstrap.init();
         Mixins.addConfiguration("mixins.amber.json");
         MixinEnvironment.getDefaultEnvironment().setObfuscationContext("searge");
+        log.info("Amber end mixin...");
         log.info(MixinEnvironment.getDefaultEnvironment().getObfuscationContext());
     }
-    // -Dfml.coreMods.load=dev.amber.backend.mixin.AmberMixinLoader
+
     @Override
     public String[] getASMTransformerClass() {
         return new String[0];

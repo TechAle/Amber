@@ -4,5 +4,6 @@
   "package": "dev.amber.backend.mixin.mixins",
   "refmap": "mixins.amber.refmap.json",
   "mixins": [
+    "MixinGuiBossOverlay"
   ]
 }
