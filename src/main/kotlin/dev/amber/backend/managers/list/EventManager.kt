@@ -59,11 +59,6 @@ object EventManager : manager {
             val excluded = event.gui == null || blurExclusions.contains(event.gui.javaClass.name)
             if (!er.isShaderActive && !excluded) {
                 er.loadShader(ResourceLocation("amber/fade_in_blur.json"))
-                Minecraft.getMinecraft().getResourceManager().getResource(ResourceLocation("amber/fade_in_blur.json"));
-                /*
-                    [14:47:33] [Client thread/WARN] [minecraft/EntityRenderer]: Failed to load shader: amber:image.png
-                    net.minecraft.client.util.JsonException: Invalid image.png: File not found
-                 */
                 start = System.currentTimeMillis()
             } else if (er.isShaderActive && excluded) {
                 er.stopUseShader()
