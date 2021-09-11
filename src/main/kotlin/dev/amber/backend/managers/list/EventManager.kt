@@ -13,6 +13,20 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import org.lwjgl.input.Keyboard
+import net.minecraft.client.shader.ShaderGroup
+
+import net.minecraftforge.fml.relauncher.ReflectionHelper
+import net.minecraft.client.renderer.RenderGlobal
+import java.lang.reflect.Field
+import net.minecraft.util.ResourceLocation
+
+import net.minecraft.client.Minecraft
+
+import net.minecraft.client.renderer.EntityRenderer
+
+import net.minecraftforge.client.event.GuiOpenEvent
+import org.apache.commons.lang3.ArrayUtils
+
 
 /**
  * @author A2H
@@ -27,6 +41,35 @@ object EventManager : manager {
     fun onClientTick(event: TickEvent.ClientTickEvent) {
         if (mc.player == null) return
         modules.filter(Module::enabled).forEach(Module::onTick)
+        val f: Field = ReflectionHelper.findField(ShaderGroup::class.java, "listShaders", "field_148031_d")
+    }
+
+    private var _listShaders: Field? = null
+    private var blurExclusions = ArrayList<String>()
+    private var start: Long = 0
+
+    @SubscribeEvent
+    fun onGuiChange(event: GuiOpenEvent) {
+        if (_listShaders == null) {
+            // This was inverted lol
+            _listShaders = ReflectionHelper.findField(ShaderGroup::class.java, "listShaders", "field_148031_d")
+        }
+        if (Minecraft.getMinecraft().world != null) {
+            val er = Minecraft.getMinecraft().entityRenderer
+            val excluded = event.gui == null || blurExclusions.contains(event.gui.javaClass.name)
+            if (!er.isShaderActive && !excluded) {
+                er.loadShader(ResourceLocation("amber:shader/fade_in_blur.json"))
+                Minecraft.getMinecraft().getResourceManager().getResource(ResourceLocation("amber:shader/fade_in_blur.json"));
+                /*
+                    [14:47:33] [Client thread/WARN] [minecraft/EntityRenderer]: Failed to load shader: amber:image.png
+                    net.minecraft.client.util.JsonException: Invalid image.png: File not found
+                 */
+                start = System.currentTimeMillis()
+            } else if (er.isShaderActive && excluded) {
+                er.stopUseShader()
+                // new ResourceLocation("gamesense:capeblack.png")
+            }
+        }
     }
 
     /*

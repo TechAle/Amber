@@ -11,6 +11,16 @@ import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import java.util.logging.Logger
+import net.minecraft.client.Minecraft
+
+import net.minecraft.client.gui.GuiNewChat
+
+import net.minecraft.client.gui.GuiIngame
+
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper
+
+
+
 
 /*
     @author TechAle

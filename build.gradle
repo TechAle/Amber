@@ -19,9 +19,8 @@ apply plugin: "com.github.johnrengelman.shadow"
 apply plugin: 'eclipse'
 apply plugin: 'org.spongepowered.mixin'
 
-version = project.modVersion
-group = project.modGroup
-archivesBaseName = project.modName
+version project.modVersion
+group project.modGroup
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
@@ -69,6 +68,17 @@ dependencies {
 mixin {
     defaultObfuscationEnv 'searge'
     add sourceSets.main, 'mixins.amber.refmap.json'
+}
+
+processResources {
+    inputs.property 'version', project.version
+
+    exclude '**/rawimagefiles'
+
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+        expand 'version': project.version
+    }
 }
 
 shadowJar {
