@@ -1,4 +1,4 @@
-package dev.amber.client.module
+package dev.amber.frontend.module
 
 import dev.amber.backend.events.core.EventHandler
 import net.minecraftforge.client.event.RenderWorldLastEvent

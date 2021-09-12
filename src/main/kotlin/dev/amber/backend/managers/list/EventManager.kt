@@ -6,7 +6,7 @@ import dev.amber.backend.events.list.EventGuiChange
 import dev.amber.backend.events.list.EventMessage
 import dev.amber.backend.events.list.EventRenderTick
 import dev.amber.backend.managers.list.ModuleManager.modules
-import dev.amber.client.module.Module
+import dev.amber.frontend.module.Module
 import net.minecraftforge.client.event.ClientChatEvent
 import net.minecraftforge.client.event.GuiOpenEvent
 import net.minecraftforge.client.event.RenderGameOverlayEvent
@@ -43,21 +43,6 @@ object EventManager : manager {
     @SubscribeEvent
     fun onGuiChange(event: GuiOpenEvent) {
         EventHandler.call(EventGuiChange(event))
-        /*
-        if (_listShaders == null) {
-            // This was inverted lol
-            _listShaders = ReflectionHelper.findField(ShaderGroup::class.java, "listShaders", "field_148031_d")
-        }
-        if (Minecraft.getMinecraft().world != null) {
-            val er = Minecraft.getMinecraft().entityRenderer
-            val excluded = event.gui == null || blurExclusions.contains(event.gui.javaClass.name)
-            if (!er.isShaderActive && !excluded) {
-                er.loadShader(ResourceLocation("amber/fade_in_blur.json"))
-                start = System.currentTimeMillis()
-            } else if (er.isShaderActive && excluded) {
-                er.stopUseShader()
-            }
-        }*/
     }
 
     private fun getProgress(): Float {
@@ -67,23 +52,6 @@ object EventManager : manager {
     @SubscribeEvent
     fun onRenderTick(event: RenderTickEvent) {
         EventHandler.call(EventRenderTick(event))
-        /*
-        if (event.phase == TickEvent.Phase.END && Minecraft.getMinecraft().currentScreen != null && Minecraft.getMinecraft().entityRenderer.isShaderActive) {
-            val sg = Minecraft.getMinecraft().entityRenderer.shaderGroup
-            try {
-                val shaders: List<Shader?> = _listShaders?.get(sg) as List<Shader?>
-                for (s in shaders) {
-                    val su: ShaderUniform? = s?.getShaderManager()?.getShaderUniform("Progress")
-                    if (su != null) {
-                        su.set(getProgress())
-                    }
-                }
-            } catch (e: IllegalArgumentException) {
-                Throwables.propagate(e)
-            } catch (e: IllegalAccessException) {
-                Throwables.propagate(e)
-            }
-        }*/
     }
 
 

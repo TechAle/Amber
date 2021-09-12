@@ -1,4 +1,4 @@
-package dev.amber.client.module.modules.misc
+package dev.amber.frontend.module.modules.misc
 
 import dev.amber.api.setting.SettingManager
 import dev.amber.api.setting.values.BooleanSetting
@@ -6,7 +6,7 @@ import dev.amber.api.setting.values.DoubleSetting
 import dev.amber.api.setting.values.IntegerSetting
 import dev.amber.api.setting.values.ModeSetting
 import dev.amber.api.util.MessageUtil
-import dev.amber.client.module.Module
+import dev.amber.frontend.module.Module
 import org.lwjgl.input.Keyboard
 
 /**
@@ -17,7 +17,7 @@ object ExampleModule : Module(category = Category.Misc, "Example") {
     val settingA=SettingManager.registerSetting(BooleanSetting("Boolean Thingy",false),this)
     val settingB=SettingManager.registerSetting(DoubleSetting("Double Thingy",1.0,0.0,10.0),this)
     val settingC=SettingManager.registerSetting(IntegerSetting("Integer Thingy",25,0,100),this)
-    val settingD=SettingManager.registerSetting(ModeSetting("Mode",Mode.A),this)
+    val settingD=SettingManager.registerSetting(ModeSetting("Mode", Mode.A),this)
 
     override fun onEnable() {
         MessageUtil.sendClientMessage("Example Module")

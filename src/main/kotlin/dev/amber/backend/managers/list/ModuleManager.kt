@@ -1,12 +1,10 @@
 package dev.amber.backend.managers.list
 
 import dev.amber.api.util.LOGGER
-import dev.amber.client.module.Module
-import dev.amber.client.module.modules.client.GUIModule
-import dev.amber.client.module.modules.client.HUDModule
-import dev.amber.client.module.modules.hud.ExampleHUD
-import dev.amber.client.module.modules.misc.ExampleModule
-import dev.amber.frontend.module.modules.client.Blur
+import dev.amber.frontend.module.Module
+import dev.amber.frontend.module.modules.client.*
+import dev.amber.frontend.module.modules.misc.*
+import dev.amber.frontend.module.modules.hud.*
 
 /**
  * @author A2H
@@ -21,6 +19,7 @@ object ModuleManager : manager {
         addModule(HUDModule)
         addModule(ExampleHUD)
         addModule(Blur)
+        addModule(BottomColor)
         LOGGER.endTimer("Module Manager")
     }
 

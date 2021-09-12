@@ -1,9 +1,9 @@
-package dev.amber.client.module.modules.client
+package dev.amber.frontend.module.modules.client
 
 import dev.amber.api.util.Globals.mc
 import dev.amber.api.util.Globals.nullCheck
 import dev.amber.client.gui.HudScreen
-import dev.amber.client.module.Module
+import dev.amber.frontend.module.Module
 import org.lwjgl.input.Keyboard
 
 object HUDModule : Module(Category.Client, "HUDEditor") {

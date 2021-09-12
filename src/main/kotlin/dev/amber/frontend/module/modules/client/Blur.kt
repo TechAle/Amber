@@ -7,7 +7,7 @@ import dev.amber.backend.events.core.EventTarget
 import dev.amber.backend.events.core.imp.Priority
 import dev.amber.backend.events.list.EventGuiChange
 import dev.amber.backend.events.list.EventRenderTick
-import dev.amber.client.module.Module
+import dev.amber.frontend.module.Module
 import net.minecraft.client.Minecraft
 import net.minecraft.client.shader.Shader
 import net.minecraft.client.shader.ShaderGroup

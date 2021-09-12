@@ -1,8 +1,8 @@
-package dev.amber.client.module.modules.hud
+package dev.amber.frontend.module.modules.hud
 
 import dev.amber.api.util.Globals.mc
 import dev.amber.api.util.Globals.nullCheck
-import dev.amber.client.module.Module
+import dev.amber.frontend.module.Module
 import java.awt.Color
 
 /**
