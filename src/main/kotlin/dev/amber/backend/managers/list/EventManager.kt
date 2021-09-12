@@ -1,10 +1,13 @@
 package dev.amber.backend.managers.list
 
+import com.google.common.base.Throwables
 import dev.amber.api.util.Globals.mc
 import dev.amber.client.module.Module
 import dev.amber.backend.managers.list.ModuleManager.modules
 import dev.amber.backend.events.core.EventHandler
+import dev.amber.backend.events.list.EventGuiChange
 import dev.amber.backend.events.list.EventMessage
+import dev.amber.backend.events.list.EventRenderTick
 import net.minecraftforge.client.event.ClientChatEvent
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.client.event.RenderWorldLastEvent
@@ -23,9 +26,16 @@ import net.minecraft.util.ResourceLocation
 import net.minecraft.client.Minecraft
 
 import net.minecraft.client.renderer.EntityRenderer
+import net.minecraft.client.shader.Shader
 
 import net.minecraftforge.client.event.GuiOpenEvent
 import org.apache.commons.lang3.ArrayUtils
+import sun.plugin.util.ProgressMonitor.getProgress
+
+import net.minecraft.client.shader.ShaderUniform
+
+import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent
+import java.lang.IllegalArgumentException
 
 
 /**
@@ -41,15 +51,17 @@ object EventManager : manager {
     fun onClientTick(event: TickEvent.ClientTickEvent) {
         if (mc.player == null) return
         modules.filter(Module::enabled).forEach(Module::onTick)
-        val f: Field = ReflectionHelper.findField(ShaderGroup::class.java, "listShaders", "field_148031_d")
     }
 
     private var _listShaders: Field? = null
     private var blurExclusions = ArrayList<String>()
     private var start: Long = 0
+    private var fadeTime = 0
 
     @SubscribeEvent
     fun onGuiChange(event: GuiOpenEvent) {
+        EventHandler.call(EventGuiChange(event))
+        /*
         if (_listShaders == null) {
             // This was inverted lol
             _listShaders = ReflectionHelper.findField(ShaderGroup::class.java, "listShaders", "field_148031_d")
@@ -62,17 +74,35 @@ object EventManager : manager {
                 start = System.currentTimeMillis()
             } else if (er.isShaderActive && excluded) {
                 er.stopUseShader()
-                // new ResourceLocation("gamesense:capeblack.png")
             }
-        }
+        }*/
     }
 
-    /*
-    EventHandler.call(EventClientTick(TickEvent.Phase.START))
-    @EventTarget(Priority.HIGHEST)
-    fun prova(event : EventClientTick) {
+    private fun getProgress(): Float {
+        return Math.min((System.currentTimeMillis() - start) / (fadeTime.toFloat()), 1f)
+    }
 
-    }*/
+    @SubscribeEvent
+    fun onRenderTick(event: RenderTickEvent) {
+        EventHandler.call(EventRenderTick(event))
+        /*
+        if (event.phase == TickEvent.Phase.END && Minecraft.getMinecraft().currentScreen != null && Minecraft.getMinecraft().entityRenderer.isShaderActive) {
+            val sg = Minecraft.getMinecraft().entityRenderer.shaderGroup
+            try {
+                val shaders: List<Shader?> = _listShaders?.get(sg) as List<Shader?>
+                for (s in shaders) {
+                    val su: ShaderUniform? = s?.getShaderManager()?.getShaderUniform("Progress")
+                    if (su != null) {
+                        su.set(getProgress())
+                    }
+                }
+            } catch (e: IllegalArgumentException) {
+                Throwables.propagate(e)
+            } catch (e: IllegalAccessException) {
+                Throwables.propagate(e)
+            }
+        }*/
+    }
 
 
     @SubscribeEvent

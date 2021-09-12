@@ -1,5 +1,6 @@
 package dev.amber.client.module
 
+import dev.amber.backend.events.core.EventHandler
 import net.minecraftforge.client.event.ClientChatEvent
 import net.minecraftforge.client.event.RenderWorldLastEvent
 import org.lwjgl.input.Keyboard
@@ -17,13 +18,26 @@ open class Module(val category: Category, val name : String) {
 
     fun toggle() {
         enabled = !enabled
-        if (enabled) onEnable()
-        else onDisable()
+        if (enabled) enable()
+        else disable()
     }
 
-    open fun onEnable() {}
+    fun enable() {
+        onEnable()
+        EventHandler.register(this)
+    }
 
-    open fun onDisable() {}
+    fun disable() {
+        onDisable()
+        EventHandler.unregister(this)
+    }
+
+
+    open fun onEnable() {
+    }
+
+    open fun onDisable() {
+    }
 
     open fun onTick() {}
 

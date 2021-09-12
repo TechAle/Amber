@@ -4,6 +4,7 @@ import dev.amber.api.util.LOGGER
 import dev.amber.client.module.Module
 import dev.amber.client.module.modules.client.GUIModule
 import dev.amber.client.module.modules.client.HUDModule
+import dev.amber.client.module.modules.hud.Blur
 import dev.amber.client.module.modules.hud.ExampleHUD
 import dev.amber.client.module.modules.misc.ExampleModule
 
@@ -19,6 +20,7 @@ object ModuleManager : manager {
         addModule(GUIModule)
         addModule(HUDModule)
         addModule(ExampleHUD)
+        addModule(Blur)
         LOGGER.endTimer("Module Manager")
     }
 
