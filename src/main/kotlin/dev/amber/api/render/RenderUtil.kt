@@ -1,38 +1,17 @@
 package dev.amber.api.render
 
-import com.sun.javafx.geom.Vec2d
-import dev.amber.api.util.MathUtils
 import dev.amber.api.variables.ABColor
 import net.minecraft.client.renderer.GlStateManager
-import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL11.*
 import org.lwjgl.opengl.GL32
-import org.lwjgl.opengl.GL11.glPopAttrib
-
-import org.lwjgl.opengl.GL11.glScaled
-
-import org.lwjgl.opengl.GL11.GL_TEXTURE_2D
 
 import org.lwjgl.opengl.GL11.glEnable
-
-import org.lwjgl.opengl.GL11.GL_BLEND
 
 import org.lwjgl.opengl.GL11.glDisable
 
 import org.lwjgl.opengl.GL11.GL_LINE_SMOOTH
 
-import org.lwjgl.opengl.GL11.glVertex2d
-
-import org.lwjgl.opengl.GL11.GL_POLYGON
-
 import org.lwjgl.opengl.GL11.glColor4f
-
-import org.lwjgl.opengl.GL11.GL_POINTS
-
-import org.lwjgl.opengl.GL11.glPushAttrib
-import java.util.Collections.max
-import java.util.Collections.min
-import kotlin.math.*
 
 
 object RenderUtil {
@@ -87,20 +66,7 @@ object RenderUtil {
             releaseGL()
     }
 
-    fun drawRectBorder(x: Float, y: Float, width: Float, height: Float, borderWidth: Float, insideC: ABColor, borderColor: ABColor, once : Boolean = true ) {
-        if (once)
-            prepareGL()
-
-        // Draw inside
-        drawRect(x + borderWidth, y + borderWidth, width - borderWidth , height - borderWidth, insideC)
-        /// Draw border
-        drawBorder(x, y, width, height, borderWidth, borderColor, once)
-
-        if (once)
-            releaseGL()
-    }
-
-    fun drawBorder(x: Float, y: Float, width: Float, height: Float, borderWidth: Float, borderColor: ABColor, once: Boolean = true) {
+    fun drawRectOutline(x: Float, y: Float, width: Float, height: Float, borderWidth: Float, borderColor: ABColor, once: Boolean = true) {
         if (once)
             prepareGL()
 
@@ -117,6 +83,22 @@ object RenderUtil {
             releaseGL()
     }
 
+    fun drawRectBorder(x: Float, y: Float, width: Float, height: Float, borderWidth: Float, insideC: ABColor, borderColor: ABColor, once : Boolean = true ) {
+        if (once)
+            prepareGL()
+
+        // Draw inside
+        drawRect(x + borderWidth, y + borderWidth, width - borderWidth , height - borderWidth, insideC)
+        /// Draw border
+        drawRectOutline(x, y, width, height, borderWidth, borderColor, once)
+
+        if (once)
+            releaseGL()
+    }
+
+
+
+    /*
     fun drawRoundedRect(x: Double, y: Double, width: Float, height: Float, radius: Float, c: ABColor) {
         prepareGL()
 
@@ -148,7 +130,7 @@ object RenderUtil {
 
         releaseGL()
     }
-
+    */
 
 
 }
