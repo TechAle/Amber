@@ -1,41 +1,23 @@
 package dev.amber.backend.managers.list
 
-import com.google.common.base.Throwables
 import dev.amber.api.util.Globals.mc
-import dev.amber.client.module.Module
-import dev.amber.backend.managers.list.ModuleManager.modules
 import dev.amber.backend.events.core.EventHandler
 import dev.amber.backend.events.list.EventGuiChange
 import dev.amber.backend.events.list.EventMessage
 import dev.amber.backend.events.list.EventRenderTick
+import dev.amber.backend.managers.list.ModuleManager.modules
+import dev.amber.client.module.Module
 import net.minecraftforge.client.event.ClientChatEvent
+import net.minecraftforge.client.event.GuiOpenEvent
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.client.event.RenderWorldLastEvent
 import net.minecraftforge.fml.common.eventhandler.EventPriority
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
-import org.lwjgl.input.Keyboard
-import net.minecraft.client.shader.ShaderGroup
-
-import net.minecraftforge.fml.relauncher.ReflectionHelper
-import net.minecraft.client.renderer.RenderGlobal
-import java.lang.reflect.Field
-import net.minecraft.util.ResourceLocation
-
-import net.minecraft.client.Minecraft
-
-import net.minecraft.client.renderer.EntityRenderer
-import net.minecraft.client.shader.Shader
-
-import net.minecraftforge.client.event.GuiOpenEvent
-import org.apache.commons.lang3.ArrayUtils
-import sun.plugin.util.ProgressMonitor.getProgress
-
-import net.minecraft.client.shader.ShaderUniform
-
 import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent
-import java.lang.IllegalArgumentException
+import org.lwjgl.input.Keyboard
+import java.lang.reflect.Field
 
 
 /**
