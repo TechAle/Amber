@@ -1,25 +1,15 @@
 package dev.amber.client
 
 import dev.amber.api.util.LOGGER
-import dev.amber.backend.managers.list.ModuleManager
 import dev.amber.backend.events.core.EventHandler
 import dev.amber.backend.managers.list.CommandManager
 import dev.amber.backend.managers.list.EventManager
+import dev.amber.backend.managers.list.ModuleManager
 import dev.amber.backend.managers.list.manager
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
-import java.util.logging.Logger
-import net.minecraft.client.Minecraft
-
-import net.minecraft.client.gui.GuiNewChat
-
-import net.minecraft.client.gui.GuiIngame
-
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper
-
-
 
 
 /*

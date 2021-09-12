@@ -6,7 +6,6 @@ package dev.amber.backend.events.list
  */
 
 import dev.amber.backend.events.core.imp.Event
-import net.minecraftforge.client.event.GuiOpenEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 
 class EventRenderTick(

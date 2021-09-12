@@ -1,16 +1,21 @@
 package dev.amber.client.module
 
 import dev.amber.backend.events.core.EventHandler
-import net.minecraftforge.client.event.ClientChatEvent
 import net.minecraftforge.client.event.RenderWorldLastEvent
 import org.lwjgl.input.Keyboard
 
 /**
  * @author A2H
  */
-open class Module(val category: Category, val name : String) {
-    var enabled = false
+open class Module(val category: Category, val name : String, enable : Boolean = false) {
+    var enabled = enable
     open var key = Keyboard.KEY_NONE
+
+    init {
+        if (enable) {
+            enable()
+        }
+    }
 
     enum class Category {
         Combat, Exploits, Movement, Misc, Render, Client, HUD

@@ -2,12 +2,10 @@ package dev.amber.backend.events.core
 
 import dev.amber.backend.events.core.imp.Event
 import dev.amber.backend.events.core.imp.Priority
-import java.util.concurrent.CopyOnWriteArrayList
-import java.lang.IllegalAccessException
-import java.lang.IllegalArgumentException
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
-import java.util.HashMap
+import java.util.*
+import java.util.concurrent.CopyOnWriteArrayList
 
 /**
  * @author DarkMagician6

@@ -1,20 +1,10 @@
 package dev.amber.api.util
 
-import dev.amber.client.Amber
-import java.lang.StringBuilder
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.logging.*
 import java.util.logging.Formatter
-import java.util.logging.Handler
-import java.util.logging.Logger
-import java.util.logging.LogRecord
-import java.util.logging.ConsoleHandler
-
-
-
-
-
 
 
 object LOGGER {

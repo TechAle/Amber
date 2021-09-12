@@ -6,10 +6,8 @@ package dev.amber.api.variables
     This is basically gs
     https://github.com/TechAle/gsplusplus/blob/7814860ff21279a4e8a2b80fe899812fd602c6b6/src/main/java/com/gamesense/api/util/render/GSColor.java#L11
  */
-import java.awt.Color
 import net.minecraft.client.renderer.GlStateManager
-
-
+import java.awt.Color
 
 
 class ABColor : Color {

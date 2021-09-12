@@ -6,7 +6,6 @@ package dev.amber.backend.events.list
  */
 
 import dev.amber.backend.events.core.imp.Event
-import dev.amber.backend.events.core.imp.EventCancellable
 import net.minecraftforge.client.event.ClientChatEvent
 
 class EventMessage(

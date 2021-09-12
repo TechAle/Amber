@@ -1,11 +1,11 @@
 package dev.amber.backend.managers.list
 
 import dev.amber.api.util.LOGGER
-import dev.amber.client.command.Command
-import dev.amber.client.command.commands.TestCommand
 import dev.amber.backend.events.core.EventTarget
 import dev.amber.backend.events.core.imp.Priority
 import dev.amber.backend.events.list.EventMessage
+import dev.amber.client.command.Command
+import dev.amber.client.command.commands.TestCommand
 
 /*
     @author TechAle

@@ -1,7 +1,7 @@
 package dev.amber.api.util
 
-import dev.amber.api.util.Globals.mc
 import com.mojang.realmsclient.gui.ChatFormatting
+import dev.amber.api.util.Globals.mc
 import net.minecraft.util.text.TextComponentString
 
 /**

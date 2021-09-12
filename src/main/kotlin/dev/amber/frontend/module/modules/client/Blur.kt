@@ -1,41 +1,38 @@
-package dev.amber.client.module.modules.hud
+@file:Suppress("DEPRECATION", "unused")
+
+package dev.amber.frontend.module.modules.client
 
 import com.google.common.base.Throwables
-import dev.amber.api.util.Globals.mc
-import dev.amber.api.util.Globals.nullCheck
 import dev.amber.backend.events.core.EventTarget
 import dev.amber.backend.events.core.imp.Priority
 import dev.amber.backend.events.list.EventGuiChange
-import dev.amber.backend.events.list.EventMessage
 import dev.amber.backend.events.list.EventRenderTick
-import dev.amber.backend.managers.list.EventManager
 import dev.amber.client.module.Module
 import net.minecraft.client.Minecraft
 import net.minecraft.client.shader.Shader
 import net.minecraft.client.shader.ShaderGroup
-import net.minecraft.client.shader.ShaderUniform
 import net.minecraft.util.ResourceLocation
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import net.minecraftforge.fml.relauncher.ReflectionHelper
-import java.awt.Color
-import java.lang.IllegalArgumentException
 import java.lang.reflect.Field
 
 /**
- * @author Hoosiers
+ * @author TechAle
+ * @since 12/09/21
+ * Thanks to tterrag1098 for the blur mod (https://github.com/tterrag1098/Blur)
  */
-object Blur : Module(category = Category.Client, "Blur") {
+object Blur : Module(category = Category.Client, "Blur", true) {
 
-    private var _listShaders: Field? = null
+    private var listShaders: Field? = null
     private var blurExclusions = ArrayList<String>()
     private var start: Long = 0
     private var fadeTime = 0
 
     @EventTarget(Priority.HIGHEST)
-    fun GuiChangeEvent(event : EventGuiChange) {
-        if (_listShaders == null) {
+    fun guiChangeEvent(event : EventGuiChange) {
+        if (listShaders == null) {
             // This was inverted lol
-            _listShaders = ReflectionHelper.findField(ShaderGroup::class.java, "listShaders", "field_148031_d")
+            listShaders = ReflectionHelper.findField(ShaderGroup::class.java, "listShaders", "field_148031_d")
         }
         if (Minecraft.getMinecraft().world != null) {
             val er = Minecraft.getMinecraft().entityRenderer
@@ -50,9 +47,9 @@ object Blur : Module(category = Category.Client, "Blur") {
     }
 
     override fun onEnable() {
-        if (_listShaders == null) {
+        if (listShaders == null) {
             // This was inverted lol
-            _listShaders = ReflectionHelper.findField(ShaderGroup::class.java, "listShaders", "field_148031_d")
+            listShaders = ReflectionHelper.findField(ShaderGroup::class.java, "listShaders", "field_148031_d")
         }
         if (Minecraft.getMinecraft().world != null) {
             val er = Minecraft.getMinecraft().entityRenderer
@@ -74,16 +71,13 @@ object Blur : Module(category = Category.Client, "Blur") {
     }
 
     @EventTarget(Priority.HIGHEST)
-    fun RenderTickEvent(event : EventRenderTick) {
+    fun renderTickEvent(event : EventRenderTick) {
         if (event.data.phase == TickEvent.Phase.END && Minecraft.getMinecraft().currentScreen != null && Minecraft.getMinecraft().entityRenderer.isShaderActive) {
             val sg = Minecraft.getMinecraft().entityRenderer.shaderGroup
             try {
-                val shaders: List<Shader?> = _listShaders?.get(sg) as List<Shader?>
+                @Suppress("UNCHECKED_CAST") val shaders: List<Shader?> = listShaders?.get(sg) as List<Shader?>
                 for (s in shaders) {
-                    val su: ShaderUniform? = s?.getShaderManager()?.getShaderUniform("Progress")
-                    if (su != null) {
-                        su.set(getProgress())
-                    }
+                    s?.shaderManager?.getShaderUniform("Progress")?.set(getProgress())
                 }
             } catch (e: IllegalArgumentException) {
                 Throwables.propagate(e)
@@ -96,6 +90,6 @@ object Blur : Module(category = Category.Client, "Blur") {
 
 
     private fun getProgress(): Float {
-        return Math.min((System.currentTimeMillis() - start) / (fadeTime.toFloat()), 1f)
+        return ((System.currentTimeMillis() - start) / (fadeTime.toFloat())).coerceAtMost(1f)
     }
 }

@@ -1,8 +1,8 @@
 package dev.amber.api.setting.values
 
 import dev.amber.api.setting.Setting
-import java.lang.Double.min
 import java.lang.Double.max
+import java.lang.Double.min
 
 /**
  * @author lukflug
