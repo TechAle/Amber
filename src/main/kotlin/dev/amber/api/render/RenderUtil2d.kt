@@ -157,26 +157,61 @@ object RenderUtil2d {
     fun drawRoundedRect(Start: Vec2f, width: Float, height: Float, radius: Float, c: ABColor) {
         prepareGL()
 
-        glBegin(GL_QUADS)
-        glColor4f(c.getRed().toFloat() / 255, c.getGreen().toFloat() / 255, c.getBlue().toFloat() / 255, c.getAlpha().toFloat() / 255)
-
-        // Draw up
-        drawRect(Start.add(radius, 0f), width - radius * 2, radius, c)
-        // Draw down
-        drawRect(Start.add(radius, height), width - radius * 2,  -radius, c)
+        /// Rectangles
+        // Draw body
+        drawRect(Start.add(radius, 0f), width - radius * 2,  height, c)
         // Draw left
         drawRect(Start.add(0f, radius), radius, height - radius * 2, c)
         // Draw Right
         drawRect(Start.add(width, radius), -radius, height - radius * 2, c)
-        // Draw body
-        drawRect(Start.add(radius, radius), width - radius * 2, height - radius * 2, c)
-
-        glEnd()
+        /// Circles
+        // Top right
+        drawCircleFilled(Start.add(width - radius, radius), radius, 90, c, Pair(0f, 90f), false)
+        // Top left
+        drawCircleFilled(Start.add(radius, radius), radius, 90, c, Pair(270f, 360f), false)
+        // Bottom left
+        drawCircleFilled(Start.add(radius, height - radius), radius, 90, c, Pair(180f, 270f), false)
+        // Bottom right
+        drawCircleFilled(Start.add(width - radius, height - radius), radius, 90, c, Pair(90f, 180f), false)
 
         releaseGL()
     }
 
+    fun drawRoundedRectOutline(Start: Vec2f, width: Float, height: Float, radius: Float, widthBorder: Float, c: ABColor, once: Boolean = true) {
+        if (once)
+            prepareGL()
 
+        /// Rectangle
+        // Top
+        drawLine(Start.add(radius, 0f), Start.add(width - radius , 0f), widthBorder, c, false)
+        // Bottom
+        drawLine(Start.add(radius, height), Start.add(width - radius, height), widthBorder, c, false)
+        // Left
+        drawLine(Start.add(0f, radius), Start.add(0f, height - radius ), widthBorder, c, false)
+        // Right
+        drawLine(Start.add(width, radius), Start.add(width, height - radius ), widthBorder, c, false)
+        /// Circles
+        // Top right
+        drawCircleOutline(Start.add(width - radius, radius), radius, 0, widthBorder, c, Pair(0f, 90f), false)
+        // Top left
+        drawCircleOutline(Start.add(radius, radius), radius, 0, widthBorder, c, Pair(270f, 360f), false)
+        // Bottom left
+        drawCircleOutline(Start.add(radius, height - radius), radius, 0, widthBorder, c, Pair(180f, 270f), false)
+        // Bottom right
+        drawCircleOutline(Start.add(width - radius, height - radius), radius, 0, widthBorder, c, Pair(90f, 180f), false)
+
+        if (once)
+            releaseGL()
+    }
+
+    fun drawRoundedRectBorder(Start: Vec2f, width: Float, height: Float, radius: Float, widthBorder: Float, cInside: ABColor, cOutside: ABColor, once: Boolean = true) {
+        if (once)
+            prepareGL()
+        drawRoundedRect(Start, width, height, radius, cInside)
+        drawRoundedRectOutline(Start, width, height, radius, widthBorder, cOutside)
+        if (once)
+            releaseGL()
+    }
 
     /*
         Lines
@@ -209,11 +244,10 @@ object RenderUtil2d {
         glVertex2f(start.x, start.y)
         glVertex2f(end.x, end.y)
         glEnd()
-        glLineWidth(1f)
 
         if (once) {
             releaseGL()
-        }
+        } else  glLineWidth(1f)
     }
 
     /*
