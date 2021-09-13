@@ -2,6 +2,9 @@
 
 package dev.amber.frontend.module.modules.client
 
+import com.sun.javafx.geom.Vec2d
+import dev.amber.api.render.RenderUtil2d
+import dev.amber.api.variables.ABColor
 import dev.amber.frontend.module.Module
 
 /**
@@ -11,7 +14,6 @@ import dev.amber.frontend.module.Module
 object BottomColor : Module(category = Category.Client, "BottomColor", true) {
 
     override fun onRender() {
-
     }
 
 }

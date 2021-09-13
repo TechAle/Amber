@@ -99,10 +99,10 @@ object RenderUtil2d {
         Circle
      */
 
-    fun drawCircleFilled(center: Vec2d, radius: Double, segments: Int = 0, color: ABColor, once: Boolean = true) {
+    fun drawCircleFilled(center: Vec2d, radius: Double, segments: Int = 0, color: ABColor, angleRange: Pair<Float, Float> = Pair(0f, 360f), once: Boolean = true) {
         if (once)
             prepareGL()
-        drawArcFilled(center, radius, Pair(0f, 360f), segments, color)
+        drawArcFilled(center, radius, angleRange, segments, color)
         if (once)
             releaseGL()
     }
@@ -127,10 +127,10 @@ object RenderUtil2d {
         return max(segments.roundToInt(), 16)
     }
 
-    fun drawCircleOutline(center: Vec2d, radius: Double, segments: Int = 0, lineWidth: Float = 1f, color: ABColor, once: Boolean = true) {
+    fun drawCircleOutline(center: Vec2d, radius: Double, segments: Int = 0, lineWidth: Float = 1f, color: ABColor, angleRange: Pair<Float, Float> = Pair(0f, 360f), once: Boolean = true) {
         if (once)
             prepareGL()
-        drawArcOutline(center, radius, Pair(0f, 360f), segments, lineWidth, color)
+        drawArcOutline(center, radius, angleRange, segments, lineWidth, color)
         if (once)
             releaseGL()
     }
@@ -139,12 +139,12 @@ object RenderUtil2d {
         drawLineStrip(arcVertices, lineWidth, color)
     }
 
-    fun drawCircleBorder(center: Vec2d, radius: Double, segments: Int = 0, lineWidth: Float = 1f, insideC: ABColor, outsideC: ABColor, once: Boolean = true) {
+    fun drawCircleBorder(center: Vec2d, radius: Double, segments: Int = 0, lineWidth: Float = 1f, insideC: ABColor, outsideC: ABColor, angleRange: Pair<Float, Float> = Pair(0f, 360f), once: Boolean = true) {
         if (once)
             prepareGL()
 
-        drawCircleFilled(center, radius - lineWidth, segments, insideC, false)
-        drawCircleOutline(center, radius, segments, lineWidth + 2, outsideC, false)
+        drawCircleFilled(center, radius - lineWidth, segments, insideC, angleRange, false)
+        drawCircleOutline(center, radius, segments, lineWidth + 2, outsideC, angleRange, false)
 
         if (once)
             releaseGL()
