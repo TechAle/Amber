@@ -2,9 +2,6 @@
 
 package dev.amber.frontend.module.modules.client
 
-import dev.amber.api.render.RenderUtil
-import dev.amber.api.util.LOGGER
-import dev.amber.api.variables.ABColor
 import dev.amber.frontend.module.Module
 
 /**
