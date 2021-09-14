@@ -15,7 +15,9 @@ import net.minecraft.util.math.Vec2f
 object BottomColor : Module(category = Category.Client, "BottomColor", true) {
 
     override fun onRender() {
-        RenderUtil2d.drawRoundedRectBorder(Vec2f(100f, 100f), 100f, 100f, 5f, 10f, ABColor(255, 0, 0, 150), ABColor(0, 255, 0, 150))
+        RenderUtil2d.drawRectOutline(Vec2f(100f, 100f), 100f, 100f, 5f, true,
+                                    ABColor(255, 16, 19), ABColor(0, 0, 255),
+                                    ABColor(0, 255, 128), ABColor(255, 255, 2))
     }
 
 }
