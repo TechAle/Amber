@@ -2,72 +2,33 @@ package dev.amber.api.render
 
 import dev.amber.api.util.MathUtils
 import dev.amber.api.variables.ABColor
-import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.util.math.Vec2f
 import org.lwjgl.opengl.GL11.*
-import org.lwjgl.opengl.GL32
 import kotlin.math.*
 
 
 object RenderUtil2d {
 
-    /**
-     * Setup Gl states
-     */
-    fun prepareGL() {
-        GlStateManager.pushMatrix()
-        glLineWidth(1f)
-        glEnable(GL_LINE_SMOOTH)
-        glEnable(GL32.GL_DEPTH_CLAMP)
-        glHint(GL_LINE_SMOOTH_HINT, GL_NICEST)
-        GlStateManager.disableAlpha()
-        GlStateManager.shadeModel(GL_SMOOTH)
-        GlStateManager.disableCull()
-        GlStateManager.enableBlend()
-        GlStateManager.depthMask(false)
-        GlStateManager.disableTexture2D()
-        GlStateManager.disableLighting()
-    }
-
-    /**
-     * Reverts Gl states
-     */
-    fun releaseGL() {
-        GlStateManager.enableTexture2D()
-        GlStateManager.enableDepth()
-        GlStateManager.disableBlend()
-        GlStateManager.enableCull()
-        GlStateManager.shadeModel(GL_FLAT)
-        GlStateManager.enableAlpha()
-        GlStateManager.depthMask(true)
-        glDisable(GL32.GL_DEPTH_CLAMP)
-        glDisable(GL_LINE_SMOOTH)
-        GlStateManager.color(1f, 1f, 1f)
-        glLineWidth(1f)
-        GlStateManager.popMatrix()
-    }
-
     /*
         Rect
      */
-
     fun drawRect(Start: Vec2f, width: Float, height: Float, c: ABColor, once : Boolean = false) {
         if (once)
-            prepareGL()
+            VertexUtil.prepareGl()
         glBegin(GL_QUADS)
-        glColor4f(c.getRed().toFloat() / 255, c.getGreen().toFloat() / 255, c.getBlue().toFloat() / 255, c.getAlpha().toFloat() / 255)
-        glVertex2f(Start.x, Start.y)
-        glVertex2f(Start.x, Start.y + height)
-        glVertex2f(Start.x + width, Start.y + height)
-        glVertex2f(Start.x + width, Start.y)
+        c.glColor()
+        VertexUtil.add(Start)
+        VertexUtil.add(Start.add(0f, height))
+        VertexUtil.add(Start.add(width, height))
+        VertexUtil.add(Start.add(width, 0f))
         glEnd()
         if (once)
-            releaseGL()
+            VertexUtil.releaseGL()
     }
 
     fun drawRectOutline(Start: Vec2f, width: Float, height: Float, borderWidth: Float, borderColor: ABColor, once: Boolean = true) {
         if (once)
-            prepareGL()
+            VertexUtil.prepareGl()
 
         // Top
         drawRect(Start, width , borderWidth, borderColor)
@@ -79,12 +40,12 @@ object RenderUtil2d {
         drawRect(Start.add(width, borderWidth), -borderWidth, height - borderWidth, borderColor)
 
         if (once)
-            releaseGL()
+            VertexUtil.releaseGL()
     }
 
     fun drawRectBorder(Start: Vec2f, width: Float, height: Float, borderWidth: Float, insideC: ABColor, borderColor: ABColor, once : Boolean = true ) {
         if (once)
-            prepareGL()
+            VertexUtil.prepareGl()
 
         // Draw inside
         drawRect(Start.add(borderWidth, borderWidth), width - borderWidth , height - borderWidth, insideC)
@@ -92,7 +53,7 @@ object RenderUtil2d {
         drawRectOutline(Start, width, height, borderWidth, borderColor, once)
 
         if (once)
-            releaseGL()
+            VertexUtil.releaseGL()
     }
 
     /*
@@ -101,10 +62,10 @@ object RenderUtil2d {
 
     fun drawCircleFilled(center: Vec2f, radius: Float, segments: Int = 0, color: ABColor, angleRange: Pair<Float, Float> = Pair(0f, 360f), once: Boolean = true) {
         if (once)
-            prepareGL()
+            VertexUtil.prepareGl()
         drawArcFilled(center, radius, angleRange, segments, color)
         if (once)
-            releaseGL()
+            VertexUtil.releaseGL()
     }
     private fun drawArcFilled(center: Vec2f, radius: Float, angleRange: Pair<Float, Float>, segments: Int = 0, color: ABColor) {
         val arcVertices = getArcVertices(center, radius, angleRange, segments)
@@ -129,10 +90,10 @@ object RenderUtil2d {
 
     fun drawCircleOutline(center: Vec2f, radius: Float, segments: Int = 0, lineWidth: Float = 1f, color: ABColor, angleRange: Pair<Float, Float> = Pair(0f, 360f), once: Boolean = true) {
         if (once)
-            prepareGL()
+            VertexUtil.prepareGl()
         drawArcOutline(center, radius, angleRange, segments, lineWidth, color)
         if (once)
-            releaseGL()
+            VertexUtil.releaseGL()
     }
     private fun drawArcOutline( center: Vec2f, radius: Float, angleRange: Pair<Float, Float>, segments: Int = 0, lineWidth: Float = 1f, color: ABColor) {
         val arcVertices = getArcVertices(center, radius, angleRange, segments)
@@ -141,13 +102,13 @@ object RenderUtil2d {
 
     fun drawCircleBorder(center: Vec2f, radius: Float, segments: Int = 0, lineWidth: Float = 1f, insideC: ABColor, outsideC: ABColor, angleRange: Pair<Float, Float> = Pair(0f, 360f), once: Boolean = true) {
         if (once)
-            prepareGL()
+            VertexUtil.prepareGl()
 
         drawCircleFilled(center, radius - lineWidth, segments, insideC, angleRange, false)
         drawCircleOutline(center, radius, segments, lineWidth + 2, outsideC, angleRange, false)
 
         if (once)
-            releaseGL()
+            VertexUtil.releaseGL()
     }
 
     /*
@@ -155,7 +116,7 @@ object RenderUtil2d {
      */
 
     fun drawRoundedRect(Start: Vec2f, width: Float, height: Float, radius: Float, c: ABColor) {
-        prepareGL()
+        VertexUtil.prepareGl()
 
         /// Rectangles
         // Draw body
@@ -174,12 +135,12 @@ object RenderUtil2d {
         // Bottom right
         drawCircleFilled(Start.add(width - radius, height - radius), radius, 90, c, Pair(90f, 180f), false)
 
-        releaseGL()
+        VertexUtil.releaseGL()
     }
 
     fun drawRoundedRectOutline(Start: Vec2f, width: Float, height: Float, radius: Float, widthBorder: Float, c: ABColor, once: Boolean = true) {
         if (once)
-            prepareGL()
+            VertexUtil.prepareGl()
 
         /// Rectangle
         // Top
@@ -201,16 +162,16 @@ object RenderUtil2d {
         drawCircleOutline(Start.add(width - radius, height - radius), radius, 0, widthBorder, c, Pair(90f, 180f), false)
 
         if (once)
-            releaseGL()
+            VertexUtil.releaseGL()
     }
 
     fun drawRoundedRectBorder(Start: Vec2f, width: Float, height: Float, radius: Float, widthBorder: Float, cInside: ABColor, cOutside: ABColor, once: Boolean = true) {
         if (once)
-            prepareGL()
+            VertexUtil.prepareGl()
         drawRoundedRect(Start, width, height, radius, cInside)
         drawRoundedRectOutline(Start, width, height, radius, widthBorder, cOutside)
         if (once)
-            releaseGL()
+            VertexUtil.releaseGL()
     }
 
     /*
@@ -218,35 +179,35 @@ object RenderUtil2d {
      */
 
     fun drawLineStrip(vertices: Array<Vec2f>, lineWidth: Float = 1f, c: ABColor) {
-        prepareGL()
+        VertexUtil.prepareGl()
         glLineWidth(lineWidth)
 
         glBegin(GL_LINE_STRIP)
-        glColor4f(c.getRed().toFloat() / 255, c.getGreen().toFloat() / 255, c.getBlue().toFloat() / 255, c.getAlpha().toFloat() / 255)
+        c.glColor()
         for (vertex in vertices) {
-            glVertex2f(vertex.x, vertex.y)
+            VertexUtil.add(vertex)
         }
         glEnd()
 
 
-        releaseGL()
+        VertexUtil.releaseGL()
         glLineWidth(1f)
     }
 
     fun drawLine(start: Vec2f, end: Vec2f, lineWidth: Float = 1f, c: ABColor, once: Boolean = false) {
         if (once) {
-            prepareGL()
+            VertexUtil.prepareGl()
         }
 
         glLineWidth(lineWidth)
         glBegin(GL_LINES)
-        glColor4f(c.getRed().toFloat() / 255, c.getGreen().toFloat() / 255, c.getBlue().toFloat() / 255, c.getAlpha().toFloat() / 255)
+        c.glColor()
         glVertex2f(start.x, start.y)
         glVertex2f(end.x, end.y)
         glEnd()
 
         if (once) {
-            releaseGL()
+            VertexUtil.releaseGL()
         } else  glLineWidth(1f)
     }
 
@@ -256,16 +217,16 @@ object RenderUtil2d {
 
     private fun drawTriangleFan(center: Vec2f, vertices: Array<Vec2f>, c: ABColor, once: Boolean = true) {
         if (once)
-            prepareGL()
+            VertexUtil.prepareGl()
         glBegin(GL_TRIANGLE_FAN)
-        glColor4f(c.getRed().toFloat() / 255, c.getGreen().toFloat() / 255, c.getBlue().toFloat() / 255, c.getAlpha().toFloat() / 255)
+        c.glColor()
         glVertex2f(center.x, center.y)
         for (vertex in vertices) {
             glVertex2f(vertex.x, vertex.y)
         }
         glEnd()
         if (once)
-            releaseGL()
+            VertexUtil.releaseGL()
     }
 
     /*
