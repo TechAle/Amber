@@ -9,6 +9,8 @@ import kotlin.math.*
 
 object RenderUtil2d {
 
+    //region rect
+
     fun drawRect(Start: Vec2f, width: Float, height: Float, c: ABColor, once : Boolean = false) {
         if (once)
             VertexUtil.prepareGl()
@@ -117,7 +119,16 @@ object RenderUtil2d {
     }
     fun drawRectBorder(Start: Vec2f, width: Float, height: Float, borderWidth: Float, insideC: Array<ABColor>, insideTopBottom: Boolean = false,
                        borderColor: Array<ABColor>, borderTopBottom: Boolean = false, once : Boolean = false ) {
+        if (once)
+            VertexUtil.prepareGl()
 
+        // Draw inside
+        drawRect(Start.add(borderWidth, borderWidth), width - borderWidth, height - borderWidth, false, insideC, insideTopBottom)
+        /// Draw border
+        drawRectOutline(Start, width, height, borderWidth, false, borderColor, borderTopBottom)
+
+        if (once)
+            VertexUtil.releaseGL()
     }
 
     //endregion
