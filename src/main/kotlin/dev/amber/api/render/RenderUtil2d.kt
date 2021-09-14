@@ -9,8 +9,6 @@ import kotlin.math.*
 
 object RenderUtil2d {
 
-    //region Rect
-
     fun drawRect(Start: Vec2f, width: Float, height: Float, c: ABColor, once : Boolean = false) {
         if (once)
             VertexUtil.prepareGl()
@@ -24,14 +22,14 @@ object RenderUtil2d {
         if (once)
             VertexUtil.releaseGL()
     }
-    fun drawRect(Start: Vec2f, width: Float, height: Float, once : Boolean = false, vararg colors: ABColor, leftRight: Boolean = false, topBottom: Boolean = false) {
+    fun drawRect(Start: Vec2f, width: Float, height: Float, once : Boolean = false, colors: Array<ABColor>, topBottom: Boolean = false) {
 
         if (colors.isNotEmpty()) {
 
             val arr =  when (colors.size) {
                 1 -> Array(4) { colors[1] }
-                2, 3 -> if (leftRight) arrayOf(colors[0], colors[0], colors[1], colors[1])
-                        else arrayOf(colors[0], colors[1], colors[0], colors[2])
+                2, 3 -> if (topBottom) arrayOf(colors[0], colors[1], colors[1], colors[0])
+                        else arrayOf(colors[0], colors[0], colors[1], colors[1])
                 else -> Array(4) {colors[it]}
             }
 
@@ -66,59 +64,39 @@ object RenderUtil2d {
         if (once)
             VertexUtil.releaseGL()
     }
-    fun drawRectOutline(Start: Vec2f, width: Float, height: Float, borderWidth: Float, once : Boolean = false, vararg colors: ABColor, leftRight: Boolean = false) {
+    fun drawRectOutline(Start: Vec2f, width: Float, height: Float, borderWidth: Float, once : Boolean = false, colors: Array<ABColor>, topBottom: Boolean = false) {
 
         if (colors.isNotEmpty()) {
 
-            val arr = when (colors.size) {
+            val arr =  when (colors.size) {
                 1 -> Array(4) { colors[1] }
-                2, 3 -> if (leftRight) arrayOf(colors[0], colors[0], colors[1], colors[1])
-                else arrayOf(colors[0], colors[1], colors[0], colors[2])
-                else -> Array(4) { colors[it] }
+                2, 3 -> if (topBottom) arrayOf(colors[0], colors[1], colors[1], colors[0])
+                else arrayOf(colors[0], colors[0], colors[1], colors[1])
+                else -> Array(4) {colors[it]}
             }
 
 
             if (once)
                 VertexUtil.prepareGl()
 
-            // Top Start: Vec2f, width: Float, height: Float, once : Boolean = false, vararg colors: ABColor, leftRight: Boolean = false
-            drawRect(Start, width , borderWidth, false, arr[0], arr[1], leftRight = false)
-
-            /*
-            // Bottom
-            drawRect(Start.add(0f, height), width, borderWidth, borderColor)
-            // Left
-            drawRect(Start.add(0f, borderWidth), borderWidth, height - borderWidth, borderColor)
-            // Right
-            drawRect(Start.add(width, borderWidth), -borderWidth, height - borderWidth, borderColor)*/
-
-            /*
-            glBegin(GL_LINE_STRIP)
-            // Border out
-            VertexUtil.add(Start, arr[0])
-            VertexUtil.add(Start.add(0f, height), arr[1])
-            VertexUtil.add(Start.add(width, height), arr[2])
-            VertexUtil.add(Start.add(width, 0f), arr[3])
-            VertexUtil.add(Start, arr[0])
-            // Border in
-            VertexUtil.add(Start.add(borderWidth, borderWidth), arr[0])
-            VertexUtil.add(Start.add(borderWidth, height - borderWidth), arr[1])
-            VertexUtil.add(Start.add(width - borderWidth , height - borderWidth), arr[2])
-            VertexUtil.add(Start.add(width - borderWidth, borderWidth), arr[3])
-            VertexUtil.add(Start.add(borderWidth, borderWidth), arr[0])
-            glEnd()*/
-
-            /*
+            /// Vertices
+            // Top left
+            drawRect(Start, borderWidth, borderWidth, arr[0], false)
+            // Top right
+            drawRect(Start.add(width, 0f), -borderWidth, borderWidth, arr[1], false)
+            // Bottom right
+            drawRect(Start.add(width, height), -borderWidth, -borderWidth, arr[2], false)
+            // Bottom left
+            drawRect(Start.add(0f, height), borderWidth, -borderWidth, arr[3], false)
+            /// Gradient
             // Top
-            drawRect(Start, width, borderWidth, arr[0])
-            // Bottom
-            drawRect(Start.add(0f, height), width, borderWidth, arr[1])
-            // Left
-            drawRect(Start.add(0f, borderWidth), borderWidth, height - borderWidth, arr[2])
+            drawRect(Start.add(borderWidth, 0f), width - borderWidth*2, borderWidth, false, arrayOf(arr[0], arr[1]), topBottom = false)
             // Right
-            drawRect(Start.add(width, borderWidth), -borderWidth, height - borderWidth, arr[3])
-             */
-
+            drawRect(Start.add(width, borderWidth), -borderWidth, height - borderWidth, false, arrayOf(arr[1], arr[2]), topBottom = true)
+            // Bottom
+            drawRect(Start.add(borderWidth, height), width - borderWidth*2, -borderWidth, false, arrayOf(arr[3], arr[2]), topBottom = false)
+            // Left
+            drawRect(Start.add(0f, borderWidth), borderWidth, height - borderWidth, false, arrayOf(arr[0], arr[3]), topBottom = true)
             if (once)
                 VertexUtil.releaseGL()
         }
@@ -136,6 +114,10 @@ object RenderUtil2d {
 
         if (once)
             VertexUtil.releaseGL()
+    }
+    fun drawRectBorder(Start: Vec2f, width: Float, height: Float, borderWidth: Float, insideC: Array<ABColor>, insideTopBottom: Boolean = false,
+                       borderColor: Array<ABColor>, borderTopBottom: Boolean = false, once : Boolean = false ) {
+
     }
 
     //endregion
