@@ -267,7 +267,19 @@ object RenderUtil2d {
 
 
     /// Border circle
+    // Normal
     fun drawCircleBorder(center: Vec2f, radius: Float, segments: Int = 0, lineWidth: Float = 1f, insideC: ABColor, outsideC: ABColor, angleRange: Pair<Float, Float> = Pair(0f, 360f), once: Boolean = false) {
+        if (once)
+            VertexUtil.prepareGl()
+
+        drawCircleFilled(center, radius - lineWidth, segments, insideC, angleRange, false)
+        drawCircleOutline(center, radius, segments, lineWidth + 2, outsideC, angleRange, false)
+
+        if (once)
+            VertexUtil.releaseGL()
+    }
+    // Gradient
+    fun drawCircleBorder(center: Vec2f, radius: Float, segments: Int = 0, lineWidth: Float = 1f, insideC: Array<ABColor>, outsideC: Array<ABColor>, angleRange: Pair<Float, Float> = Pair(0f, 360f), once: Boolean = false) {
         if (once)
             VertexUtil.prepareGl()
 
