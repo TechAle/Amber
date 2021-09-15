@@ -222,8 +222,9 @@ object RenderUtil2d {
             val rChange = (color[i + 1].red - red)/pieces
             val gChange = (color[i + 1].green - green)/pieces
             val bChange = (color[i + 1].blue - blue)/pieces
+            val aChange = (color[i + 1].alpha - alpha)/pieces
             for(j in 0..pieces.toInt() - 1) {
-                finalColors.add(ABColor(red + (rChange * j).toInt(), green + (gChange*j).toInt(), blue + (bChange*j).toInt(), alpha))
+                finalColors.add(ABColor(red + (rChange * j).toInt(), green + (gChange*j).toInt(), blue + (bChange*j).toInt(), alpha + (aChange*j).toInt()))
             }
 
         }
@@ -284,7 +285,7 @@ object RenderUtil2d {
             VertexUtil.prepareGl()
 
         drawCircleFilled(center, radius - lineWidth, segments, insideC, angleRange, false)
-        drawCircleOutline(center, radius, segments, lineWidth + 2, outsideC, angleRange, false)
+        drawCircleOutline(center, radius - lineWidth/2 - .5f, segments, lineWidth + 2, outsideC, angleRange, false)
 
         if (once)
             VertexUtil.releaseGL()
