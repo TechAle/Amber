@@ -15,13 +15,7 @@ import net.minecraft.util.math.Vec2f
 object BottomColor : Module(category = Category.Client, "BottomColor", true) {
 
     override fun onRender() {
-        /*
-            Start: Vec2f, width: Float, height: Float, borderWidth: Float, insideC: Array<ABColor>, insideTopBottom: Boolean = false,
-                       borderColor: Array<ABColor>, borderTopBottom: Boolean = false, once : Boolean = false
-         */
-        RenderUtil2d.drawRectBorder(Vec2f(100f, 100f), 100f, 100f, 10f,
-                arrayOf(ABColor(255, 0, 0), ABColor(0, 0, 255)), false,
-                arrayOf(ABColor(255, 255, 0), ABColor(0, 255, 255)), false, once = true)
+        RenderUtil2d.drawCircleFilled(Vec2f(100f, 100f), 100f, 360, arrayOf(ABColor(255, 255, 255), ABColor(255, 255, 0), ABColor(255, 0, 0), ABColor(0, 0, 0)), once = true)
     }
 
 }
