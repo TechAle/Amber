@@ -15,7 +15,7 @@ import net.minecraft.util.math.Vec2f
 object BottomColor : Module(category = Category.Client, "BottomColor", true) {
 
     override fun onRender() {
-        RenderUtil2d.drawCircleFilled(Vec2f(100f, 100f), 100f, 360, arrayOf(ABColor(255, 255, 255), ABColor(255, 255, 0), ABColor(255, 0, 0), ABColor(0, 0, 0)), once = true)
+        RenderUtil2d.drawCircleOutline(Vec2f(100f, 100f), 100f, 360, 5f, arrayOf(ABColor(255, 255, 255), ABColor(255, 255, 0), ABColor(255, 0, 0), ABColor(0, 0, 0)), once = true)
     }
 
 }

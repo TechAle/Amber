@@ -207,6 +207,11 @@ object RenderUtil2d {
     }
     private fun drawArcFilled(center: Vec2f, radius: Float, angleRange: Pair<Float, Float>, segments: Int = 0, color: Array<ABColor>) {
         val arcVertices = getArcVertices(center, radius, angleRange, segments)
+
+        drawTriangleFan(center, arcVertices, getGradientVertices(color, arcVertices), false)
+    }
+
+    fun getGradientVertices(color: Array<ABColor>, arcVertices: Array<Vec2f>) : ArrayList<ABColor> {
         val pieces = arcVertices.size / (color.size.toFloat() - 1)
         var finalColors = arrayListOf<ABColor>()
         for (i in 0..color.size - 2) {
@@ -230,10 +235,11 @@ object RenderUtil2d {
             while (finalColors.size != arcVertices.size)
                 finalColors.add(color[color.size - 1])
 
-        drawTriangleFan(center, arcVertices, finalColors, false)
+        return finalColors
     }
 
     /// Outline circle
+    // Normal
     fun drawCircleOutline(center: Vec2f, radius: Float, segments: Int = 0, lineWidth: Float = 1f, color: ABColor, angleRange: Pair<Float, Float> = Pair(0f, 360f), once: Boolean = false) {
         if (once)
             VertexUtil.prepareGl()
@@ -245,6 +251,20 @@ object RenderUtil2d {
         val arcVertices = getArcVertices(center, radius, angleRange, segments)
         drawLineStrip(arcVertices, lineWidth, color)
     }
+
+    // Gradient
+    fun drawCircleOutline(center: Vec2f, radius: Float, segments: Int = 0, lineWidth: Float = 1f, color: Array<ABColor>, angleRange: Pair<Float, Float> = Pair(0f, 360f), once: Boolean = false) {
+        if (once)
+            VertexUtil.prepareGl()
+        drawArcOutline(center, radius, angleRange, segments, lineWidth, color)
+        if (once)
+            VertexUtil.releaseGL()
+    }
+    private fun drawArcOutline( center: Vec2f, radius: Float, angleRange: Pair<Float, Float>, segments: Int = 0, lineWidth: Float = 1f, color: Array<ABColor>) {
+        val arcVertices = getArcVertices(center, radius, angleRange, segments)
+        drawLineStrip(arcVertices, lineWidth, getGradientVertices(color, arcVertices))
+    }
+
 
     /// Border circle
     fun drawCircleBorder(center: Vec2f, radius: Float, segments: Int = 0, lineWidth: Float = 1f, insideC: ABColor, outsideC: ABColor, angleRange: Pair<Float, Float> = Pair(0f, 360f), once: Boolean = false) {
@@ -335,6 +355,21 @@ object RenderUtil2d {
         c.glColor()
         for (vertex in vertices) {
             VertexUtil.add(vertex)
+        }
+        glEnd()
+
+
+        VertexUtil.releaseGL()
+        glLineWidth(1f)
+    }
+
+    fun drawLineStrip(vertices: Array<Vec2f>, lineWidth: Float = 1f, c: ArrayList<ABColor>) {
+        VertexUtil.prepareGl()
+        glLineWidth(lineWidth)
+
+        glBegin(GL_LINE_STRIP)
+        for ((idx, value) in vertices.withIndex()) {
+            VertexUtil.add(value, c[idx])
         }
         glEnd()
 
