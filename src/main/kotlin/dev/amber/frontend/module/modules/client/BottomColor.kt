@@ -16,12 +16,12 @@ object BottomColor : Module(category = Category.Client, "BottomColor", true) {
 
     override fun onRender() {
         /*
-        Start: Vec2f, width: Float, height: Float, radius: Float, colors: Array<ABColor>,
-        once: Boolean = false, topBottom: Boolean = false
+            Start: Vec2f, width: Float, height: Float, radius: Float, widthBorder: Float,
+            colors: Array<ABColor>, once: Boolean = false, topBottom: Boolean = false
          */
-        RenderUtil2d.drawRoundedRect(Vec2f(100f, 100f), 100f, 100f, 5f,
-                arrayOf(ABColor(255, 255, 255), ABColor(0, 255, 255), ABColor(0, 0, 255), ABColor(0, 0, 0)), true, true)
-
+        RenderUtil2d.drawRoundedRectOutline(Vec2f(100f, 100f), 100f, 100f, 5f, 5f,
+                                            arrayOf(ABColor(255, 0, 0), ABColor(0, 255, 0), ABColor(0, 0, 255), ABColor(255, 255, 255)),
+                                            true)
     }
 
 }

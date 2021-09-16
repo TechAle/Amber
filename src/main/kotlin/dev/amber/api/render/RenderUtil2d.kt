@@ -381,6 +381,8 @@ object RenderUtil2d {
         }
     }
 
+    /// Outline
+    // Normal
     fun drawRoundedRectOutline(Start: Vec2f, width: Float, height: Float, radius: Float, widthBorder: Float, c: ABColor, once: Boolean = false) {
         if (once)
             VertexUtil.prepareGl()
@@ -406,6 +408,52 @@ object RenderUtil2d {
 
         if (once)
             VertexUtil.releaseGL()
+    }
+    // Gradient
+    fun drawRoundedRectOutline(Start: Vec2f, width: Float, height: Float, radius: Float, widthBorder: Float, colors: Array<ABColor>, once: Boolean = false, topBottom: Boolean = false) {
+
+        when(colors.size) {
+            0 -> return
+            1 -> drawRoundedRectOutline(Start, width, height, radius, widthBorder, colors[0])
+            else -> {
+
+                if (once)
+                    VertexUtil.prepareGl()
+
+                val arr =  when (colors.size) {
+                    2, 3 -> if (topBottom) arrayOf(colors[0], colors[1], colors[1], colors[0])
+                    else arrayOf(colors[0], colors[0], colors[1], colors[1])
+                    else -> Array(4) {colors[it]}
+                }
+
+                /// Rectangle
+                // Top
+
+                drawLine(Start.add(radius, 0f), Start.add(width - radius , 0f), widthBorder, arr[0], arr[1])
+                // Bottom
+                drawLine(Start.add(radius, height), Start.add(width - radius, height), widthBorder, arr[3], arr[2])
+                // Left
+                drawLine(Start.add(0f, radius), Start.add(0f, height - radius ), widthBorder, arr[0], arr[3])
+                // Right
+                drawLine(Start.add(width, radius), Start.add(width, height - radius ), widthBorder, arr[1], arr[2])
+                /// Circles
+                // Top right
+                drawCircleOutline(Start.add(width - radius, radius), radius, 0, widthBorder, colors[1], Pair(0f, 90f))
+                // Top left
+                drawCircleOutline(Start.add(radius, radius), radius, 0, widthBorder, colors[0], Pair(270f, 360f))
+                // Bottom left
+                drawCircleOutline(Start.add(radius, height - radius), radius, 0, widthBorder, colors[3], Pair(180f, 270f))
+                // Bottom right
+                drawCircleOutline(Start.add(width - radius, height - radius), radius, 0, widthBorder, colors[2], Pair(90f, 180f))
+
+
+
+                if (once)
+                    VertexUtil.releaseGL()
+
+            }
+        }
+
     }
 
     fun drawRoundedRectBorder(Start: Vec2f, width: Float, height: Float, radius: Float, widthBorder: Float, cInside: ABColor, cOutside: ABColor, once: Boolean = false) {
@@ -462,6 +510,22 @@ object RenderUtil2d {
         c.glColor()
         glVertex2f(start.x, start.y)
         glVertex2f(end.x, end.y)
+        glEnd()
+
+        if (once) {
+            VertexUtil.releaseGL()
+        } else  glLineWidth(1f)
+    }
+
+    fun drawLine(start: Vec2f, end: Vec2f, lineWidth: Float = 1f, first: ABColor, second: ABColor, once: Boolean = false) {
+        if (once) {
+            VertexUtil.prepareGl()
+        }
+
+        glLineWidth(lineWidth)
+        glBegin(GL_LINES)
+        VertexUtil.add(start, first)
+        VertexUtil.add(end, second)
         glEnd()
 
         if (once) {
