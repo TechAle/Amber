@@ -18,9 +18,7 @@ object BottomColor : Module(category = Category.Client, "BottomColor", true) {
         /*
         start: Vec2f, end: Vec2f, lineWidth: Float = 1f, c: Array<ABColor>, once: Boolean = false
          */
-        RenderUtil2d.drawLine(Vec2f(50f, 50f), Vec2f(200f, 200f), 2f,
-                arrayOf(ABColor(255, 255, 255), ABColor(255, 0, 255), ABColor(0, 255, 255), ABColor(255, 255, 0)),
-        true)
+        RenderUtil2d.drawText("prova", 0, 0, ABColor(255, 255, 0), 1, 5f)
     }
 
 }

@@ -1,7 +1,10 @@
 package dev.amber.api.render
 
+import com.mojang.realmsclient.gui.ChatFormatting
+import dev.amber.api.util.Globals.mc
 import dev.amber.api.util.MathUtils
 import dev.amber.api.variables.ABColor
+import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.util.math.Vec2f
 import org.lwjgl.opengl.GL11.*
 import kotlin.math.*
@@ -615,6 +618,37 @@ object RenderUtil2d {
         glEnd()
         if (once)
             VertexUtil.releaseGL()
+    }
+
+    //endregion
+
+    //region Text
+    /*
+        Justify values:
+        0 -> Left
+        1 -> Center
+        2 -> Right
+     */
+    fun drawText(text: String, x: Int, y: Int, color: ABColor, justify: Int = 0, fontSize : Float = -1f) {
+
+        var xVal = when(justify) {
+            1 -> x - mc.fontRenderer.getStringWidth(text) / 2
+            2 -> x - mc.fontRenderer.getStringWidth(text)
+            else -> x
+        };
+
+        var sizeNow = false
+
+        if (fontSize != -1f) {
+            GlStateManager.pushMatrix()
+            GlStateManager.scale(fontSize, fontSize, fontSize)
+            sizeNow = true
+        }
+
+        mc.fontRenderer.drawString( text, xVal, y, color.rgb);
+
+        if (sizeNow)
+            GlStateManager.popMatrix()
     }
 
     //endregion
