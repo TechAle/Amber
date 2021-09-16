@@ -161,16 +161,16 @@ object RenderUtil2d {
 
     /// Filled circle
     // Normal
-    fun drawCircleFilled(center: Vec2f, radius: Float, segments: Int = 0, color: ABColor, angleRange: Pair<Float, Float> = Pair(0f, 360f), once: Boolean = false) {
+    fun drawCircleFilled(center: Vec2f, radius: Float, segments: Int = 0, color: ABColor, angleRange: Pair<Float, Float> = Pair(0f, 360f), once: Boolean = false, onlyVertex: Boolean = false) {
         if (once)
             VertexUtil.prepareGl()
-        drawArcFilled(center, radius, angleRange, segments, color)
+        drawArcFilled(center, radius, angleRange, segments, color, onlyVertex)
         if (once)
             VertexUtil.releaseGL()
     }
-    private fun drawArcFilled(center: Vec2f, radius: Float, angleRange: Pair<Float, Float>, segments: Int = 0, color: ABColor) {
+    private fun drawArcFilled(center: Vec2f, radius: Float, angleRange: Pair<Float, Float>, segments: Int = 0, color: ABColor, onlyVertex: Boolean = false) {
         val arcVertices = getArcVertices(center, radius, angleRange, segments)
-        drawTriangleFan(center, arcVertices, color, false)
+        drawTriangleFan(center, arcVertices, color, false, onlyVertex)
     }
     private fun getArcVertices(center: Vec2f, radius: Float, angleRange: Pair<Float, Float>, segments: Int): Array<Vec2f> {
         val range = max(angleRange.first, angleRange.second) - min(angleRange.first, angleRange.second)
@@ -293,8 +293,10 @@ object RenderUtil2d {
 
     //endregion
 
-    //region Rect
+    //region Rounded Rect
 
+    /// Fill
+    // Normal
     fun drawRoundedRect(Start: Vec2f, width: Float, height: Float, radius: Float, c: ABColor, once: Boolean = false) {
         if (once)
             VertexUtil.prepareGl()
@@ -318,6 +320,65 @@ object RenderUtil2d {
 
         if (once)
             VertexUtil.releaseGL()
+    }
+    // Gradient
+    fun drawRoundedRect(Start: Vec2f, width: Float, height: Float, radius: Float, colors: Array<ABColor>, once: Boolean = false, topBottom: Boolean = false) {
+
+        when(colors.size) {
+            0 -> return
+            1 -> drawRoundedRect(Start, width, height, radius, colors[0], once)
+            else -> {
+                if (once)
+                    VertexUtil.prepareGl()
+
+                val arr =  when (colors.size) {
+                    2, 3 -> if (topBottom) arrayOf(colors[0], colors[1], colors[1], colors[0])
+                        else arrayOf(colors[0], colors[0], colors[1], colors[1])
+                    else -> Array(4) {colors[it]}
+                }
+
+                /// Border
+                /// Gradient
+                // Top
+                drawRect(Start.add(radius, 0f), width - radius*2, radius, false, arrayOf(arr[0], arr[1]), topBottom = false)
+                // Right
+                drawRect(Start.add(width, radius), -radius, height - radius*2, false, arrayOf(arr[1], arr[2]), topBottom = true)
+                // Bottom
+                drawRect(Start.add(radius, height), width - radius*2, -radius, false, arrayOf(arr[3], arr[2]), topBottom = false)
+                // Left
+                drawRect(Start.add(0f, radius), radius, height - radius*2, false, arrayOf(arr[0], arr[3]), topBottom = true)
+                // Body
+                drawRect(Start.add(radius, radius), width - radius * 2, height - radius*2, false, arrayOf(arr[0], arr[3], arr[2], arr[1]))
+                /// Circles
+                // Top right
+                drawCircleFilled(Start.add(width - radius, radius), radius, 90, arr[1], Pair(0f, 90f), false)
+                // Top left
+                drawCircleFilled(Start.add(radius, radius), radius, 90, arr[0], Pair(270f, 360f), false)
+                // Bottom left
+                drawCircleFilled(Start.add(radius, height - radius), radius, 90, arr[3], Pair(180f, 270f), false)
+                // Bottom right
+                drawCircleFilled(Start.add(width - radius, height - radius), radius, 90, arr[2], Pair(90f, 180f), false)
+
+
+
+                /*
+                    Old rounded rect. This doesnt really work, it create some shits render bugs
+                /// Body
+                glBegin(GL_POLYGON)
+                /// Circles
+                // Top left
+                drawCircleFilled(Start.add(radius, radius), radius, 90, arr[0], Pair(270f, 360f), false, true)
+                // Top right
+                drawCircleFilled(Start.add(width - radius, radius), radius, 90, arr[1], Pair(0f, 90f), false, true)
+                // Bottom right
+                drawCircleFilled(Start.add(width - radius, height - radius), radius, 90, arr[2], Pair(90f, 180f), false, true)
+                // Bottom left
+                drawCircleFilled(Start.add(radius, height - radius), radius, 90, arr[3], Pair(180f, 270f), false, true)
+                glEnd()*/
+                if (once)
+                    VertexUtil.releaseGL()
+                }
+        }
     }
 
     fun drawRoundedRectOutline(Start: Vec2f, width: Float, height: Float, radius: Float, widthBorder: Float, c: ABColor, once: Boolean = false) {
@@ -412,16 +473,19 @@ object RenderUtil2d {
 
     //region Triangle
 
-    private fun drawTriangleFan(center: Vec2f, vertices: Array<Vec2f>, c: ABColor, once: Boolean = false) {
+    private fun drawTriangleFan(center: Vec2f, vertices: Array<Vec2f>, c: ABColor, once: Boolean = false, onlyVertex: Boolean = false) {
         if (once)
             VertexUtil.prepareGl()
-        glBegin(GL_TRIANGLE_FAN)
+        if (!onlyVertex)
+            glBegin(GL_TRIANGLE_FAN)
         c.glColor()
-        glVertex2f(center.x, center.y)
+        if (!onlyVertex)
+            glVertex2f(center.x, center.y)
         for (vertex in vertices) {
             glVertex2f(vertex.x, vertex.y)
         }
-        glEnd()
+        if (!onlyVertex)
+            glEnd()
         if (once)
             VertexUtil.releaseGL()
     }

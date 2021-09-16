@@ -16,13 +16,11 @@ object BottomColor : Module(category = Category.Client, "BottomColor", true) {
 
     override fun onRender() {
         /*
-        center: Vec2f, radius: Float, segments: Int = 0, lineWidth: Float = 1f, insideC: Array<ABColor>,
-        outsideC: Array<ABColor>, angleRange: Pair<Float, Float> = Pair(0f, 360f), once: Boolean = false
+        Start: Vec2f, width: Float, height: Float, radius: Float, colors: Array<ABColor>,
+        once: Boolean = false, topBottom: Boolean = false
          */
-        RenderUtil2d.drawCircleBorder(Vec2f(100f, 100f), 20f, 700, 5f,
-                                        arrayOf(ABColor(255, 255, 255), ABColor(255, 255, 255), ABColor(0, 255, 255), ABColor(255, 255, 255), ABColor(255, 255, 255)),
-                                        arrayOf(ABColor(0, 0, 0), ABColor(255, 0, 0), ABColor(0, 0, 0)),
-                                        Pair(0f, 366f), true)
+        RenderUtil2d.drawRoundedRect(Vec2f(100f, 100f), 100f, 100f, 5f,
+                arrayOf(ABColor(255, 255, 255), ABColor(0, 255, 255), ABColor(0, 0, 255), ABColor(0, 0, 0)), true, true)
 
     }
 
