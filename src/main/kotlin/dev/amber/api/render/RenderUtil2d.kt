@@ -545,6 +545,44 @@ object RenderUtil2d {
         } else  glLineWidth(1f)
     }
 
+    fun drawLine(start: Vec2f, end: Vec2f, lineWidth: Float = 1f, c: Array<ABColor>, once: Boolean = false) {
+
+        when(c.size) {
+            0 -> return
+            1 -> drawLine(start, end, lineWidth, c[0], once)
+            2 -> drawLine(start, end, lineWidth, c[0], c[1], once)
+            else -> {
+                if (once) {
+                    VertexUtil.prepareGl()
+                }
+
+                val size = c.size - 1
+                val lines = ArrayList<Vec2f>()
+                val xDiff = (end.x - start.x)/size
+                val yDiff = (end.y - start.y)/size
+
+                for(i in 0..size) {
+                    lines.add(start.add(xDiff*i, yDiff*i))
+                }
+
+
+                glLineWidth(lineWidth)
+                glBegin(GL_LINE_STRIP)
+
+                for((idx, value) in lines.withIndex()) {
+                    VertexUtil.add(value, c[idx])
+                }
+
+                glEnd()
+
+                if (once) {
+                    VertexUtil.releaseGL()
+                } else  glLineWidth(1f)
+            }
+        }
+
+    }
+
     //endregion
 
     //region Triangle
