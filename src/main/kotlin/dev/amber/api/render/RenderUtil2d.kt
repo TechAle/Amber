@@ -456,6 +456,8 @@ object RenderUtil2d {
 
     }
 
+    /// Border
+    // Normal
     fun drawRoundedRectBorder(Start: Vec2f, width: Float, height: Float, radius: Float, widthBorder: Float, cInside: ABColor, cOutside: ABColor, once: Boolean = false) {
         if (once)
             VertexUtil.prepareGl()
@@ -464,6 +466,16 @@ object RenderUtil2d {
         if (once)
             VertexUtil.releaseGL()
     }
+    // Gradient
+    fun drawRoundedRectBorder(Start: Vec2f, width: Float, height: Float, radius: Float, widthBorder: Float, cInside: Array<ABColor>, insideTopBottom: Boolean = false, cOutside: Array<ABColor>, outsideTopBottom: Boolean = false, once: Boolean = false) {
+        if (once)
+            VertexUtil.prepareGl()
+        drawRoundedRect(Start, width, height, radius, cInside, insideTopBottom)
+        drawRoundedRectOutline(Start, width, height, radius, widthBorder, cOutside, outsideTopBottom)
+        if (once)
+            VertexUtil.releaseGL()
+    }
+
 
     //endregion
 
