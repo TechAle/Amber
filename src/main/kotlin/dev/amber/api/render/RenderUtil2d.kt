@@ -5,9 +5,16 @@ import dev.amber.api.util.Globals.mc
 import dev.amber.api.util.MathUtils
 import dev.amber.api.variables.ABColor
 import net.minecraft.client.renderer.GlStateManager
+import net.minecraft.util.ResourceLocation
 import net.minecraft.util.math.Vec2f
 import org.lwjgl.opengl.GL11.*
 import kotlin.math.*
+import net.minecraft.client.Minecraft
+
+import net.minecraft.client.gui.ScaledResolution
+
+
+
 
 
 object RenderUtil2d {
@@ -631,6 +638,9 @@ object RenderUtil2d {
      */
     fun drawText(text: String, x: Int, y: Int, color: ABColor, justify: Int = 0, fontSize : Float = -1f) {
 
+        if (text.length == 0)
+            return
+
         var xVal = when(justify) {
             1 -> x - mc.fontRenderer.getStringWidth(text) / 2
             2 -> x - mc.fontRenderer.getStringWidth(text)
@@ -651,7 +661,55 @@ object RenderUtil2d {
             GlStateManager.popMatrix()
     }
 
+    fun drawText(text: String, x:Int, y:Int, c: Array<ABColor>, justify: Int = 0, fontSize: Float = -1f, smooth: Boolean = true) {
+        when(c.size) {
+            0 -> return
+            1 -> drawText(text, x, y, c[0], justify, fontSize)
+            else -> {
+                if (text.length == 0)
+                    return
 
+                var xVal = when(justify) {
+                    1 -> x - mc.fontRenderer.getStringWidth(text) / 2
+                    2 -> x - mc.fontRenderer.getStringWidth(text)
+                    else -> x
+                };
+
+                var sizeNow = false
+
+                VertexUtil.prepareGl()
+
+                if (fontSize != -1f) {
+                    GlStateManager.pushMatrix()
+                    GlStateManager.scale(fontSize, fontSize, fontSize)
+                    sizeNow = true
+                }
+
+                var renderString = GradientFontRenderer(mc.gameSettings, ResourceLocation("textures/font/ascii.png"), mc.renderEngine, false)
+
+                val res = ScaledResolution(Minecraft.getMinecraft())
+                val width = res.scaledWidth
+                val height = res.scaledHeight
+                val x: Int = width / 2
+                val y: Int = height / 2
+                drawHelloTextWithGradient(x, y - 16, -0x1, -0x10000, renderString)
+                VertexUtil.releaseGL()
+
+                if (sizeNow)
+                    GlStateManager.popMatrix()
+
+
+            }
+        }
+    }
+
+    private fun drawHelloTextWithGradient(x: Int, y: Int, topColor: Int, bottomColor: Int, gradientFontRenderer : GradientFontRenderer) {
+        drawCenteredGradientString(gradientFontRenderer, "hellodafsadsfdsafdfsadsaf", x, y - 4, topColor, bottomColor)
+    }
+
+    fun drawCenteredGradientString(fontRendererIn: GradientFontRenderer, text: String?, x: Int, y: Int, color: Int, colorBottom: Int) {
+        fontRendererIn.drawGradientString(text, (x - fontRendererIn.getStringWidth(text) / 2).toFloat(), y.toFloat(), color, colorBottom, true, true)
+    }
 
     //endregion
 
