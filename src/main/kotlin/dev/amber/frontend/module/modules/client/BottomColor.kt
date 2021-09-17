@@ -18,7 +18,7 @@ object BottomColor : Module(category = Category.Client, "BottomColor", true) {
         /*
         start: Vec2f, end: Vec2f, lineWidth: Float = 1f, c: Array<ABColor>, once: Boolean = false
          */
-        RenderUtil2d.drawText("lol", 100, 100, arrayOf(ABColor(1), ABColor(1)))
+        RenderUtil2d.drawText("Real gradient!", 100f, 100f, arrayOf(ABColor(255, 255, 255), ABColor(0, 0, 255)))
     }
 
 }

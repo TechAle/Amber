@@ -636,7 +636,7 @@ object RenderUtil2d {
         1 -> Center
         2 -> Right
      */
-    fun drawText(text: String, x: Int, y: Int, color: ABColor, justify: Int = 0, fontSize : Float = -1f) {
+    fun drawText(text: String, x: Float, y: Float, color: ABColor, justify: Int = 0, fontSize : Float = -1f) {
 
         if (text.length == 0)
             return
@@ -655,13 +655,13 @@ object RenderUtil2d {
             sizeNow = true
         }
 
-        mc.fontRenderer.drawString( text, xVal, y, color.rgb);
+        mc.fontRenderer.drawString( text, xVal.toInt(), y.toInt(), color.rgb);
 
         if (sizeNow)
             GlStateManager.popMatrix()
     }
 
-    fun drawText(text: String, x:Int, y:Int, c: Array<ABColor>, justify: Int = 0, fontSize: Float = -1f, smooth: Boolean = true) {
+    fun drawText(text: String, x:Float, y:Float, c: Array<ABColor>, justify: Int = 0, fontSize: Float = -1f, smooth: Boolean = true) {
         when(c.size) {
             0 -> return
             1 -> drawText(text, x, y, c[0], justify, fontSize)
@@ -677,25 +677,17 @@ object RenderUtil2d {
 
                 var sizeNow = false
 
-                VertexUtil.prepareGl()
-
-                if (fontSize != -1f) {
+                if (false) {
                     GlStateManager.pushMatrix()
                     GlStateManager.scale(fontSize, fontSize, fontSize)
                     sizeNow = true
                 }
 
-                var renderString = GradientFontRenderer(mc.gameSettings, ResourceLocation("textures/font/ascii.png"), mc.renderEngine, false)
+                var renderString = GradientFontRenderer(mc.gameSettings, ResourceLocation("minecraft", "textures/font/ascii.png"), mc.renderEngine, false)
 
-                val res = ScaledResolution(Minecraft.getMinecraft())
-                val width = res.scaledWidth
-                val height = res.scaledHeight
-                val x: Int = width / 2
-                val y: Int = height / 2
-                drawHelloTextWithGradient(x, y - 16, -0x1, -0x10000, renderString)
-                VertexUtil.releaseGL()
+                renderString.drawString( text, xVal, y, c[0].rgb, c[1].rgb, false, false);
 
-                if (sizeNow)
+                if (false)
                     GlStateManager.popMatrix()
 
 
@@ -703,12 +695,12 @@ object RenderUtil2d {
         }
     }
 
-    private fun drawHelloTextWithGradient(x: Int, y: Int, topColor: Int, bottomColor: Int, gradientFontRenderer : GradientFontRenderer) {
-        drawCenteredGradientString(gradientFontRenderer, "hellodafsadsfdsafdfsadsaf", x, y - 4, topColor, bottomColor)
+    private fun drawHelloTextWithGradient(x: Int, y: Int, topColor: Int, bottomColor: Int, gradientFontRenderer : GradientFontRenderer, text: String) {
+        drawCenteredGradientString(gradientFontRenderer, text, x, y - 4, topColor, bottomColor)
     }
 
-    fun drawCenteredGradientString(fontRendererIn: GradientFontRenderer, text: String?, x: Int, y: Int, color: Int, colorBottom: Int) {
-        fontRendererIn.drawGradientString(text, (x - fontRendererIn.getStringWidth(text) / 2).toFloat(), y.toFloat(), color, colorBottom, true, true)
+    fun drawCenteredGradientString(fontRendererIn: GradientFontRenderer, text: String, x: Int, y: Int, color: Int, colorBottom: Int) {
+        fontRendererIn.drawString(text, (x - fontRendererIn.getStringWidth(text) / 2).toFloat(), y.toFloat(), color, colorBottom, false, true)
     }
 
     //endregion
