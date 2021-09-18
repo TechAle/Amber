@@ -34,18 +34,11 @@ public class GradientFontRenderer implements IResourceManagerReloadListener
     public int FONT_HEIGHT = 9;
     public Random fontRandom = new Random();
     protected final byte[] glyphWidth = new byte[65536];
-    private final int[] colorCode = new int[32];
     protected final ResourceLocation locationFontTexture;
     private final TextureManager renderEngine;
     protected float posX;
     protected float posY;
-    private boolean unicodeFlag;
     private boolean bidiFlag;
-    private float red;
-    private float blue;
-    private float green;
-    private float alpha;
-    private int textColor;
     private boolean randomStyle;
     private boolean boldStyle;
     private boolean italicStyle;
@@ -56,7 +49,6 @@ public class GradientFontRenderer implements IResourceManagerReloadListener
     {
         this.locationFontTexture = location;
         this.renderEngine = textureManagerIn;
-        this.unicodeFlag = unicode;
         bindTexture(this.locationFontTexture);
 
         for (int i = 0; i < 32; ++i)
@@ -88,7 +80,8 @@ public class GradientFontRenderer implements IResourceManagerReloadListener
                 i1 /= 4;
             }
 
-            this.colorCode[i] = (k & 255) << 16 | (l & 255) << 8 | i1 & 255;
+            int[] colorCode = new int[32];
+            colorCode[i] = (k & 255) << 16 | (l & 255) << 8 | i1 & 255;
         }
 
         this.readGlyphSizes();
@@ -196,7 +189,7 @@ public class GradientFontRenderer implements IResourceManagerReloadListener
         else
         {
             int i = "\u00c0\u00c1\u00c2\u00c8\u00ca\u00cb\u00cd\u00d3\u00d4\u00d5\u00da\u00df\u00e3\u00f5\u011f\u0130\u0131\u0152\u0153\u015e\u015f\u0174\u0175\u017e\u0207\u0000\u0000\u0000\u0000\u0000\u0000\u0000 !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\u0000\u00c7\u00fc\u00e9\u00e2\u00e4\u00e0\u00e5\u00e7\u00ea\u00eb\u00e8\u00ef\u00ee\u00ec\u00c4\u00c5\u00c9\u00e6\u00c6\u00f4\u00f6\u00f2\u00fb\u00f9\u00ff\u00d6\u00dc\u00f8\u00a3\u00d8\u00d7\u0192\u00e1\u00ed\u00f3\u00fa\u00f1\u00d1\u00aa\u00ba\u00bf\u00ae\u00ac\u00bd\u00bc\u00a1\u00ab\u00bb\u2591\u2592\u2593\u2502\u2524\u2561\u2562\u2556\u2555\u2563\u2551\u2557\u255d\u255c\u255b\u2510\u2514\u2534\u252c\u251c\u2500\u253c\u255e\u255f\u255a\u2554\u2569\u2566\u2560\u2550\u256c\u2567\u2568\u2564\u2565\u2559\u2558\u2552\u2553\u256b\u256a\u2518\u250c\u2588\u2584\u258c\u2590\u2580\u03b1\u03b2\u0393\u03c0\u03a3\u03c3\u03bc\u03c4\u03a6\u0398\u03a9\u03b4\u221e\u2205\u2208\u2229\u2261\u00b1\u2265\u2264\u2320\u2321\u00f7\u2248\u00b0\u2219\u00b7\u221a\u207f\u00b2\u25a0\u0000".indexOf(ch);
-            return i != -1 && !this.unicodeFlag ? this.renderDefaultChar(i, italic, startColor, endColor, horizontal) : this.renderUnicodeChar(ch, italic);
+            return i != -1 ? this.renderDefaultChar(i, italic, startColor, endColor, horizontal) : -1;
         }
     }
 
@@ -362,7 +355,7 @@ public class GradientFontRenderer implements IResourceManagerReloadListener
                     this.underlineStyle = false;
                     this.italicStyle = false;
 
-                    if (i1 < 0 || i1 > 15)
+                    if (i1 < 0)
                     {
                         i1 = 15;
                     }
@@ -371,10 +364,6 @@ public class GradientFontRenderer implements IResourceManagerReloadListener
                     {
                         i1 += 16;
                     }
-
-                    int j1 = this.colorCode[i1];
-                    this.textColor = j1;
-                    setColor((float)(j1 >> 16) / 255.0F, (float)(j1 >> 8 & 255) / 255.0F, (float)(j1 & 255) / 255.0F, this.alpha);
                 }
                 else if (i1 == 16)
                 {
@@ -396,14 +385,12 @@ public class GradientFontRenderer implements IResourceManagerReloadListener
                 {
                     this.italicStyle = true;
                 }
-                else if (i1 == 21)
-                {
+                else {
                     this.randomStyle = false;
                     this.boldStyle = false;
                     this.strikethroughStyle = false;
                     this.underlineStyle = false;
                     this.italicStyle = false;
-                    setColor(this.red, this.blue, this.green, this.alpha);
                 }
 
                 ++i;
@@ -431,8 +418,8 @@ public class GradientFontRenderer implements IResourceManagerReloadListener
                     c0 = c1;
                 }
 
-                float f1 = j == -1 || this.unicodeFlag ? 0.5f : 1f;
-                boolean flag = (c0 == 0 || j == -1 || this.unicodeFlag) && shadow;
+                float f1 = j == -1 ? 0.5f : 1f;
+                boolean flag = (c0 == 0 || j == -1) && shadow;
 
                 if (flag)
                 {
@@ -447,15 +434,11 @@ public class GradientFontRenderer implements IResourceManagerReloadListener
                     float lastMix = (currentCountWidth + nextCharWidth) / totalWidth;
                     int firstColor = colorMix(startColor, endColor, firstMix);
                     int lastColor = colorMix(startColor, endColor, lastMix);
-                    //f = this.renderGradientChar(c0, firstColor, lastColor, true);
                     f = this.renderChar(c0, this.italicStyle, firstColor, lastColor, horrizontal);
                     currentCountWidth += f;
                 } else {
-                    //f = this.renderGradientChar(c0, startColor, endColor, false);
                     f = this.renderChar(c0, this.italicStyle, startColor, endColor, horrizontal);
                 }
-
-                //float f = this.renderChar(c0, this.italicStyle);
 
                 if (flag)
                 {
@@ -573,12 +556,7 @@ public class GradientFontRenderer implements IResourceManagerReloadListener
                 colorTop = (colorTop & 16579836) >> 2 | colorTop & -16777216;
                 colorBottom = (colorBottom & 16579836) >> 2 | colorBottom & -16777216;
             }
-            /*
-            this.red = (float)(colorTop >> 16 & 255) / 255.0F;
-            this.blue = (float)(colorTop >> 8 & 255) / 255.0F;
-            this.green = (float)(colorTop & 255) / 255.0F;
-            this.alpha = (float)(colorTop >> 24 & 255) / 255.0F;
-            setColor(this.red, this.blue, this.green, this.alpha);*/
+
             this.posX = x;
             this.posY = y;
             this.renderStringAtPos(text, dropShadow, colorTop, colorBottom, horrizontal);
@@ -649,7 +627,7 @@ public class GradientFontRenderer implements IResourceManagerReloadListener
         {
             int i = "\u00c0\u00c1\u00c2\u00c8\u00ca\u00cb\u00cd\u00d3\u00d4\u00d5\u00da\u00df\u00e3\u00f5\u011f\u0130\u0131\u0152\u0153\u015e\u015f\u0174\u0175\u017e\u0207\u0000\u0000\u0000\u0000\u0000\u0000\u0000 !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\u0000\u00c7\u00fc\u00e9\u00e2\u00e4\u00e0\u00e5\u00e7\u00ea\u00eb\u00e8\u00ef\u00ee\u00ec\u00c4\u00c5\u00c9\u00e6\u00c6\u00f4\u00f6\u00f2\u00fb\u00f9\u00ff\u00d6\u00dc\u00f8\u00a3\u00d8\u00d7\u0192\u00e1\u00ed\u00f3\u00fa\u00f1\u00d1\u00aa\u00ba\u00bf\u00ae\u00ac\u00bd\u00bc\u00a1\u00ab\u00bb\u2591\u2592\u2593\u2502\u2524\u2561\u2562\u2556\u2555\u2563\u2551\u2557\u255d\u255c\u255b\u2510\u2514\u2534\u252c\u251c\u2500\u253c\u255e\u255f\u255a\u2554\u2569\u2566\u2560\u2550\u256c\u2567\u2568\u2564\u2565\u2559\u2558\u2552\u2553\u256b\u256a\u2518\u250c\u2588\u2584\u258c\u2590\u2580\u03b1\u03b2\u0393\u03c0\u03a3\u03c3\u03bc\u03c4\u03a6\u0398\u03a9\u03b4\u221e\u2205\u2208\u2229\u2261\u00b1\u2265\u2264\u2320\u2321\u00f7\u2248\u00b0\u2219\u00b7\u221a\u207f\u00b2\u25a0\u0000".indexOf(character);
 
-            if (character > 0 && i != -1 && !this.unicodeFlag)
+            if (character > 0 && i != -1)
             {
                 return this.charWidth[i];
             }
@@ -668,98 +646,6 @@ public class GradientFontRenderer implements IResourceManagerReloadListener
         }
     }
 
-    public String trimStringToWidth(String text, int width)
-    {
-        return this.trimStringToWidth(text, width, false);
-    }
-
-    public String trimStringToWidth(String text, int width, boolean reverse)
-    {
-        StringBuilder stringbuilder = new StringBuilder();
-        int i = 0;
-        int j = reverse ? text.length() - 1 : 0;
-        int k = reverse ? -1 : 1;
-        boolean flag = false;
-        boolean flag1 = false;
-
-        for (int l = j; l >= 0 && l < text.length() && i < width; l += k)
-        {
-            char c0 = text.charAt(l);
-            int i1 = this.getCharWidth(c0);
-
-            if (flag)
-            {
-                flag = false;
-
-                if (c0 != 'l' && c0 != 'L')
-                {
-                    if (c0 == 'r' || c0 == 'R')
-                    {
-                        flag1 = false;
-                    }
-                }
-                else
-                {
-                    flag1 = true;
-                }
-            }
-            else if (i1 < 0)
-            {
-                flag = true;
-            }
-            else
-            {
-                i += i1;
-
-                if (flag1)
-                {
-                    ++i;
-                }
-            }
-
-            if (i > width)
-            {
-                break;
-            }
-
-            if (reverse)
-            {
-                stringbuilder.insert(0, c0);
-            }
-            else
-            {
-                stringbuilder.append(c0);
-            }
-        }
-
-        return stringbuilder.toString();
-    }
-
-    private String trimStringNewline(String text)
-    {
-        while (text != null && text.endsWith("\n"))
-        {
-            text = text.substring(0, text.length() - 1);
-        }
-
-        return text;
-    }
-
-
-    public int getWordWrappedHeight(String str, int maxLength)
-    {
-        return this.FONT_HEIGHT * this.listFormattedStringToWidth(str, maxLength).size();
-    }
-
-    public void setUnicodeFlag(boolean unicodeFlagIn)
-    {
-        this.unicodeFlag = unicodeFlagIn;
-    }
-
-    public boolean getUnicodeFlag()
-    {
-        return this.unicodeFlag;
-    }
 
     public void setBidiFlag(boolean bidiFlagIn)
     {
@@ -889,15 +775,6 @@ public class GradientFontRenderer implements IResourceManagerReloadListener
         return s;
     }
 
-    public boolean getBidiFlag()
-    {
-        return this.bidiFlag;
-    }
-
-    protected void setColor(float r, float g, float b, float a)
-    {
-        GlStateManager.color(r,g,b,a);
-    }
 
     protected void enableAlpha()
     {
@@ -914,9 +791,4 @@ public class GradientFontRenderer implements IResourceManagerReloadListener
         return Minecraft.getMinecraft().getResourceManager().getResource(location);
     }
 
-    public int getColorCode(char character)
-    {
-        int i = "0123456789abcdef".indexOf(character);
-        return i >= 0 && i < this.colorCode.length ? this.colorCode[i] : -1;
-    }
 }

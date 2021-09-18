@@ -661,11 +661,13 @@ object RenderUtil2d {
             GlStateManager.popMatrix()
     }
 
-    fun drawText(text: String, x:Float, y:Float, c: Array<ABColor>, justify: Int = 0, fontSize: Float = -1f, smooth: Boolean = true) {
+    val renderString = GradientFontRenderer(mc.gameSettings, ResourceLocation("minecraft", "textures/font/ascii.png"), mc.renderEngine, false)
+
+    fun drawText(text: String, x:Float, y:Float, c: Array<ABColor>, justify: Int = 0, fontSize: Float = -1f, horizontal: Boolean = true, dropShadow: Boolean = false) {
         when(c.size) {
             0 -> return
             1 -> drawText(text, x, y, c[0], justify, fontSize)
-            else -> {
+            2 -> {
                 if (text.length == 0)
                     return
 
@@ -677,20 +679,75 @@ object RenderUtil2d {
 
                 var sizeNow = false
 
-                if (false) {
+                if (sizeNow) {
                     GlStateManager.pushMatrix()
                     GlStateManager.scale(fontSize, fontSize, fontSize)
                     sizeNow = true
                 }
 
-                var renderString = GradientFontRenderer(mc.gameSettings, ResourceLocation("minecraft", "textures/font/ascii.png"), mc.renderEngine, false)
 
-                renderString.drawString( text, xVal, y, c[0].rgb, c[1].rgb, false, false);
+                renderString.drawString( text, xVal, y, c[0].rgb, c[1].rgb, dropShadow, horizontal);
 
-                if (false)
+                if (sizeNow)
                     GlStateManager.popMatrix()
 
 
+            }
+            else -> {
+
+                var start = text.length
+                if (start == 0)
+                    return
+
+                c.dropLastWhile {
+                    c.size > start
+                }
+
+                val stringSplitted = ArrayList<String>()
+                var nColors = c.size.toFloat() - 1
+
+                var textMod = text
+
+                while (start > 0) {
+                    var nWords : Float = start / nColors
+                    if (!nWords.rem(1).equals(0f))
+                        nWords++
+
+                    stringSplitted.add(textMod.substring(0..nWords.toInt() - 1))
+
+                    textMod = textMod.substring(nWords.toInt())
+
+                    start -= nWords.toInt()
+                    nColors--
+
+                }
+
+
+                var xVal = when(justify) {
+                    1 -> x - mc.fontRenderer.getStringWidth(text) / 2
+                    2 -> x - mc.fontRenderer.getStringWidth(text)
+                    else -> x
+                };
+                var addX : Float = 0f
+
+                var sizeNow = false
+
+                if (sizeNow) {
+                    GlStateManager.pushMatrix()
+                    GlStateManager.scale(fontSize, fontSize, fontSize)
+                    sizeNow = true
+                }
+
+                for((idx, value) in stringSplitted.withIndex()) {
+
+                    renderString.drawString( value, xVal + addX, y, c[idx].rgb, c[idx + 1].rgb, dropShadow, horizontal);
+
+                    addX += renderString.getStringWidth(value)
+
+                }
+
+                if (sizeNow)
+                    GlStateManager.popMatrix()
             }
         }
     }
