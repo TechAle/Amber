@@ -12,6 +12,10 @@ import kotlin.math.*
 import net.minecraft.client.Minecraft
 
 import net.minecraft.client.gui.ScaledResolution
+import net.minecraft.client.renderer.Tessellator
+
+
+
 
 
 
@@ -759,6 +763,16 @@ object RenderUtil2d {
     fun drawCenteredGradientString(fontRendererIn: GradientFontRenderer, text: String, x: Int, y: Int, color: Int, colorBottom: Int) {
         fontRendererIn.drawString(text, (x - fontRendererIn.getStringWidth(text) / 2).toFloat(), y.toFloat(), color, colorBottom, false, true)
     }
+
+    //endregion
+
+    //region pictures
+
+    fun showPicture(x: Int, y: Int, resourceLocation: ResourceLocation) {
+        mc.textureManager.bindTexture(resourceLocation)
+        mc.ingameGUI.drawTexturedModalRect(0, 0, 0, 0, 100, 100)
+    }
+
 
     //endregion
 
