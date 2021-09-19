@@ -13,12 +13,10 @@ import net.minecraft.client.Minecraft
 
 import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.renderer.Tessellator
-
-
-
-
-
-
+import java.io.BufferedReader
+import java.io.File
+import java.io.InputStreamReader
+import javax.imageio.ImageIO
 
 
 object RenderUtil2d {
@@ -770,7 +768,11 @@ object RenderUtil2d {
 
     fun showPicture(x: Int, y: Int, resourceLocation: ResourceLocation) {
         mc.textureManager.bindTexture(resourceLocation)
-        mc.ingameGUI.drawTexturedModalRect(0, 0, 0, 0, 100, 100)
+        // ImageIO.read(javaClass.classLoader.getResource("assets/minecraft/amber/img/testresources.png"))
+        // mc.textureManager.getTexture(resourceLocation)
+        // ImageIO.read(mc.resourceManager.getResource(resourceLocation).inputStream)
+        val br = ImageIO.read(mc.resourceManager.getResource(resourceLocation).inputStream)
+        mc.ingameGUI.drawTexturedModalRect(x, y, 0, 0, br.width, br.height)
     }
 
 
