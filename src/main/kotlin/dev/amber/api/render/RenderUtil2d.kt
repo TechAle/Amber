@@ -13,6 +13,7 @@ import net.minecraft.client.Minecraft
 
 import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.renderer.Tessellator
+import net.minecraft.realms.RealmsScreen.blit
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
@@ -766,13 +767,22 @@ object RenderUtil2d {
 
     //region pictures
 
-    fun showPicture(x: Int, y: Int, resourceLocation: ResourceLocation) {
+    fun showPicture(x: Int, y: Int, resourceLocation: ResourceLocation, width: Int = -1, height: Int = -1) {
         mc.textureManager.bindTexture(resourceLocation)
         // ImageIO.read(javaClass.classLoader.getResource("assets/minecraft/amber/img/testresources.png"))
         // mc.textureManager.getTexture(resourceLocation)
         // ImageIO.read(mc.resourceManager.getResource(resourceLocation).inputStream)
-        val br = ImageIO.read(mc.resourceManager.getResource(resourceLocation).inputStream)
-        mc.ingameGUI.drawTexturedModalRect(x, y, 0, 0, br.width, br.height)
+        //mc.ingameGUI.drawTexturedModalRect(x, y, 0, 0, br.width, br.height)
+        var widthFinal = width
+        var heightFinal = height
+        if (width == -1 || height == -1) {
+            val br = ImageIO.read(mc.resourceManager.getResource(resourceLocation).inputStream)
+            if (width == -1)
+                widthFinal = br.width
+            if (height == -1)
+                heightFinal = br.height
+        }
+        blit(0, 0, 0f, 0f, widthFinal, heightFinal, widthFinal.toFloat(), heightFinal.toFloat())
     }
 
 
