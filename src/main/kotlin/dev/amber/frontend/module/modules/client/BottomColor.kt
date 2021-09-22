@@ -19,7 +19,8 @@ object BottomColor : Module(category = Category.Client, "BottomColor", true) {
         /*
         start: Vec2f, end: Vec2f, lineWidth: Float = 1f, c: Array<ABColor>, once: Boolean = false
          */
-        RenderUtil2d.showPicture(0, 0, ResourceLocation("amber/img/testresources.png"), 100, 100)
+        RenderUtil2d.showPicture(0, 0, ResourceLocation("amber/img/logowhite.png"), 100, 100,
+        arrayOf(ABColor(255, 255, 255, 150), ABColor(0, 255, 0, 150), ABColor(255, 0, 0 ,150), ABColor(0, 0, 255, 150)))
     }
 
 }
