@@ -278,13 +278,13 @@ object RenderUtil2d {
     fun drawCircleOutline(center: Vec2f, radius: Float, segments: Int = 0, lineWidth: Float = 1f, color: Array<ABColor>, angleRange: Pair<Float, Float> = Pair(0f, 360f), once: Boolean = false) {
         if (once)
             VertexUtil.prepareGl()
-        drawArcOutline(center, radius, angleRange, segments, lineWidth, color)
+        drawArcOutline(center, radius, angleRange, segments, lineWidth, color, once)
         if (once)
             VertexUtil.releaseGL()
     }
-    private fun drawArcOutline( center: Vec2f, radius: Float, angleRange: Pair<Float, Float>, segments: Int = 0, lineWidth: Float = 1f, color: Array<ABColor>) {
+    private fun drawArcOutline( center: Vec2f, radius: Float, angleRange: Pair<Float, Float>, segments: Int = 0, lineWidth: Float = 1f, color: Array<ABColor>, once: Boolean = false) {
         val arcVertices = getArcVertices(center, radius, angleRange, segments)
-        drawLineStrip(arcVertices, lineWidth, getGradientVertices(color, arcVertices))
+        drawLineStrip(arcVertices, lineWidth, getGradientVertices(color, arcVertices), once)
     }
 
 
@@ -442,8 +442,8 @@ object RenderUtil2d {
                     VertexUtil.prepareGl()
 
                 val arr =  when (colors.size) {
-                    2, 3 -> if (topBottom) arrayOf(colors[0], colors[1], colors[1], colors[0])
-                    else arrayOf(colors[0], colors[0], colors[1], colors[1])
+                    2, 3 -> {if (topBottom) arrayOf(colors[0], colors[1], colors[1], colors[0])
+                            else arrayOf(colors[0], colors[0], colors[1], colors[1])}
                     else -> Array(4) {colors[it]}
                 }
 
@@ -459,13 +459,13 @@ object RenderUtil2d {
                 drawLine(Start.add(width, radius), Start.add(width, height - radius ), widthBorder, arr[1], arr[2])
                 /// Circles
                 // Top right
-                drawCircleOutline(Start.add(width - radius, radius), radius, 0, widthBorder, colors[1], Pair(0f, 90f))
+                drawCircleOutline(Start.add(width - radius, radius), radius, 0, widthBorder, arr[1], Pair(0f, 90f))
                 // Top left
-                drawCircleOutline(Start.add(radius, radius), radius, 0, widthBorder, colors[0], Pair(270f, 360f))
+                drawCircleOutline(Start.add(radius, radius), radius, 0, widthBorder, arr[0], Pair(270f, 360f))
                 // Bottom left
-                drawCircleOutline(Start.add(radius, height - radius), radius, 0, widthBorder, colors[3], Pair(180f, 270f))
+                drawCircleOutline(Start.add(radius, height - radius), radius, 0, widthBorder, arr[3], Pair(180f, 270f))
                 // Bottom right
-                drawCircleOutline(Start.add(width - radius, height - radius), radius, 0, widthBorder, colors[2], Pair(90f, 180f))
+                drawCircleOutline(Start.add(width - radius, height - radius), radius, 0, widthBorder, arr[2], Pair(90f, 180f))
 
 
 
@@ -491,8 +491,8 @@ object RenderUtil2d {
     fun drawRoundedRectBorder(Start: Vec2f, width: Float, height: Float, radius: Float, widthBorder: Float, cInside: Array<ABColor>, insideTopBottom: Boolean = false, cOutside: Array<ABColor>, outsideTopBottom: Boolean = false, once: Boolean = false) {
         if (once)
             VertexUtil.prepareGl()
-        drawRoundedRect(Start, width, height, radius, cInside, insideTopBottom)
-        drawRoundedRectOutline(Start, width, height, radius, widthBorder, cOutside, outsideTopBottom)
+        drawRoundedRectOutline(Start, width, height, radius, widthBorder, cOutside, outsideTopBottom, once)
+        drawRoundedRect(Start.add(widthBorder/2 - .8f, widthBorder/2 - .8f), width - widthBorder + 1.2f, height - widthBorder + 1.2f, radius, cInside, insideTopBottom, once)
         if (once)
             VertexUtil.releaseGL()
     }
@@ -502,8 +502,9 @@ object RenderUtil2d {
 
     //region line
 
-    fun drawLineStrip(vertices: Array<Vec2f>, lineWidth: Float = 1f, c: ABColor) {
-        VertexUtil.prepareGl()
+    fun drawLineStrip(vertices: Array<Vec2f>, lineWidth: Float = 1f, c: ABColor, once: Boolean = false) {
+        if (once)
+            VertexUtil.prepareGl()
         glLineWidth(lineWidth)
 
         glBegin(GL_LINE_STRIP)
@@ -513,13 +514,15 @@ object RenderUtil2d {
         }
         glEnd()
 
-
-        VertexUtil.releaseGL()
-        glLineWidth(1f)
+        if (once)
+            VertexUtil.releaseGL()
+        else
+            glLineWidth(1f)
     }
 
-    fun drawLineStrip(vertices: Array<Vec2f>, lineWidth: Float = 1f, c: ArrayList<ABColor>) {
-        VertexUtil.prepareGl()
+    fun drawLineStrip(vertices: Array<Vec2f>, lineWidth: Float = 1f, c: ArrayList<ABColor>, once: Boolean = false) {
+        if (once)
+            VertexUtil.prepareGl()
         glLineWidth(lineWidth)
 
         glBegin(GL_LINE_STRIP)
@@ -528,9 +531,10 @@ object RenderUtil2d {
         }
         glEnd()
 
-
-        VertexUtil.releaseGL()
-        glLineWidth(1f)
+        if (once)
+            VertexUtil.releaseGL()
+        else
+            glLineWidth(1f)
     }
 
     fun drawLine(start: Vec2f, end: Vec2f, lineWidth: Float = 1f, c: ABColor, once: Boolean = false) {
@@ -792,7 +796,7 @@ object RenderUtil2d {
                 heightFinal = br.height
         }
 
-        blit(0, 0, 0f, 0f, widthFinal, heightFinal, widthFinal.toFloat(), heightFinal.toFloat())
+        blit(x, y, 0f, 0f, widthFinal, heightFinal, widthFinal.toFloat(), heightFinal.toFloat())
     }
 
     fun showPicture(x: Int, y: Int, resourceLocation: ResourceLocation, width: Int = -1, height: Int = -1, color: ABColor) {
@@ -809,7 +813,7 @@ object RenderUtil2d {
 
         GL11.glPushMatrix();
         color.glColor()
-        blit(0, 0, 0f, 0f, widthFinal, heightFinal, widthFinal.toFloat(), heightFinal.toFloat())
+        blit(x, y, 0f, 0f, widthFinal, heightFinal, widthFinal.toFloat(), heightFinal.toFloat())
         GL11.glPopMatrix();
     }
 
