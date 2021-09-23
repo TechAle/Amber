@@ -1,5 +1,10 @@
 package dev.amber.api.render
 
+/**
+ * @author TechAle
+ * @since 12/09/21
+ */
+
 import com.mojang.realmsclient.gui.ChatFormatting
 import dev.amber.api.util.Globals.mc
 import dev.amber.api.util.MathUtils

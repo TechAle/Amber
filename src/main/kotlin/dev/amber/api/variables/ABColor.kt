@@ -3,8 +3,7 @@ package dev.amber.api.variables
 /*
     @author: TechALe
     @since: 08/09/21
-    This is basically gs
-    https://github.com/TechAle/gsplusplus/blob/7814860ff21279a4e8a2b80fe899812fd602c6b6/src/main/java/com/gamesense/api/util/render/GSColor.java#L11
+    Took inspiration from gs
  */
 import net.minecraft.client.renderer.GlStateManager
 import java.awt.Color
@@ -12,6 +11,9 @@ import java.awt.Color
 
 class ABColor : Color {
 
+    var rainbow: Boolean = false
+    var desyncRainbow: Int = 0
+    var rainbowSpeed: Float = 1f
     /*
         We have a lot of types of constructors lol
      */
@@ -27,6 +29,12 @@ class ABColor : Color {
     constructor(color: Color) : super(color.red, color.green, color.blue, color.alpha)
     // From ABColor
     constructor(color: ABColor, a : Int) : super(color.red, color.green, color.blue, a)
+    // Rainbow
+    constructor(rainbow: Boolean, desyncRainbow: Int = 0, rainbowSpeed: Float = 1f, alpha: Int = 255) : super(0, 0, 0, alpha) {
+        this.rainbow = true
+        this.desyncRainbow = desyncRainbow
+        this.rainbowSpeed = rainbowSpeed
+    }
 
     // Utilities
     fun fromHSB(hue: Float, saturation: Float, brightness: Float): ABColor {
@@ -45,7 +53,15 @@ class ABColor : Color {
         return RGBtoHSB(red, green, blue, null)[2]
     }
 
+    fun getRainbow(): ABColor {
+        return this.fromHSB(((System.currentTimeMillis() * rainbowSpeed + this.desyncRainbow * 100) % (360 * 32)) / (360f * 32), 1f, 1f);
+    }
+
     fun glColor() {
-        GlStateManager.color(red / 255.0f, green / 255.0f, blue / 255.0f, alpha / 255.0f)
+        if (rainbow) {
+            val color = getRainbow()
+            GlStateManager.color(color.red / 255.0f, color.green / 255.0f, color.blue / 255.0f, alpha / 255.0f)
+        } else
+            GlStateManager.color(red / 255.0f, green / 255.0f, blue / 255.0f, alpha / 255.0f)
     }
 }

@@ -19,7 +19,7 @@ object ModuleManager : manager {
         addModule(HUDModule)
         addModule(ExampleHUD)
         addModule(Blur)
-        addModule(BottomColor)
+        addModule(testRendering)
         LOGGER.endTimer("Module Manager")
     }
 
