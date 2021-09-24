@@ -57,8 +57,6 @@ object testRendering : Module(category = Category.Client, "testRendering", true)
                 Pair(0f, 366f), false)
         // 2 color line
         RenderUtil2d.drawLine(Vec2f(150f, 0f), Vec2f(150f, 300f), 5f, arrayOf(ABColor(0,255,255), ABColor(255, 255, 0)))
-        RenderUtil2d.drawLine(Vec2f(300f, 0f), Vec2f(300f, 300f), 5f,
-                arrayOf(ABColor(0, 0, 0), ABColor(255, 255, 255), ABColor(255, 255, 0), ABColor(0, 0, 255)))
         /// Rounded rect
         // Normal
         RenderUtil2d.drawRoundedRect(Vec2f(160f, 50f), 50f, 10f, 2f,
@@ -69,6 +67,8 @@ object testRendering : Module(category = Category.Client, "testRendering", true)
         RenderUtil2d.drawRoundedRectBorder(Vec2f(160f, 170f), 50f, 50f, 10f, 3f,
                 arrayOf(ABColor(255, 0, 0)), true,
                 arrayOf(ABColor(255, 255, 0), ABColor(0, 255, 255)), false)
+        RenderUtil2d.drawLine(Vec2f(300f, 0f), Vec2f(300f, 300f), 5f,
+                arrayOf(ABColor(0, 0, 0), ABColor(255, 255, 255), ABColor(255, 255, 0), ABColor(0, 0, 255)))
 
         VertexUtil.releaseGL()
     }

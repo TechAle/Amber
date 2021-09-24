@@ -491,8 +491,9 @@ object RenderUtil2d {
     fun drawRoundedRectBorder(Start: Vec2f, width: Float, height: Float, radius: Float, widthBorder: Float, cInside: Array<ABColor>, insideTopBottom: Boolean = false, cOutside: Array<ABColor>, outsideTopBottom: Boolean = false, once: Boolean = false) {
         if (once)
             VertexUtil.prepareGl()
+        // Start: Vec2f, width: Float, height: Float, radius: Float, colors: Array<ABColor>, once: Boolean = false, topBottom: Boolean = false
+        drawRoundedRect(Start.add(widthBorder/2 - .8f, widthBorder/2 - .8f), width - widthBorder + 1.2f, height - widthBorder + 1.2f, radius, cInside, once, insideTopBottom)
         drawRoundedRectOutline(Start, width, height, radius, widthBorder, cOutside, outsideTopBottom, once)
-        drawRoundedRect(Start.add(widthBorder/2 - .8f, widthBorder/2 - .8f), width - widthBorder + 1.2f, height - widthBorder + 1.2f, radius, cInside, insideTopBottom, once)
         if (once)
             VertexUtil.releaseGL()
     }
