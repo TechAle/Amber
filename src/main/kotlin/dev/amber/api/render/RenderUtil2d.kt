@@ -35,14 +35,20 @@ object RenderUtil2d {
     /// Normal rect
     // Normal
     fun drawRect(Start: Vec2f, width: Float, height: Float, c: ABColor, once : Boolean = false) {
+        // Prepare opengl
         if (once)
             VertexUtil.prepareGl()
+
+        // We are drawing quads lol
         glBegin(GL_QUADS)
+        // Prepare color and add vertices
         c.glColor()
         VertexUtil.add(Start)
         VertexUtil.add(Start.add(0f, height))
         VertexUtil.add(Start.add(width, height))
         VertexUtil.add(Start.add(width, 0f))
+
+        // End and release gl
         glEnd()
         if (once)
             VertexUtil.releaseGL()
@@ -57,6 +63,7 @@ object RenderUtil2d {
             1 -> drawRect(Start, width, height, colors[0], once)
             // Every other cases
             else -> {
+                // Setup colors depending on the size
                 val arr =  when (colors.size) {
                     2, 3 -> if (topBottom) arrayOf(colors[0], colors[1], colors[1], colors[0])
                             else arrayOf(colors[0], colors[0], colors[1], colors[1])
@@ -67,7 +74,7 @@ object RenderUtil2d {
                 if (once)
                     VertexUtil.prepareGl()
 
-                // Draw with vertixes
+                // Draw with vertixes (and relative colors
                 glBegin(GL_QUADS)
                 VertexUtil.add(Start, arr[0])
                 VertexUtil.add(Start.add(0f, height), arr[1])
@@ -86,6 +93,7 @@ object RenderUtil2d {
     /// Outline rect
     // Normal
     fun drawRectOutline(Start: Vec2f, width: Float, height: Float, borderWidth: Float, borderColor: ABColor, once: Boolean = false) {
+        // Prepare
         if (once)
             VertexUtil.prepareGl()
 
@@ -98,6 +106,7 @@ object RenderUtil2d {
         // Right
         drawRect(Start.add(width, borderWidth), -borderWidth, height - borderWidth, borderColor)
 
+        // Release
         if (once)
             VertexUtil.releaseGL()
     }
@@ -183,17 +192,25 @@ object RenderUtil2d {
     /// Filled circle
     // Normal
     fun drawCircleFilled(center: Vec2f, radius: Float, segments: Int = 0, color: ABColor, angleRange: Pair<Float, Float> = Pair(0f, 360f), once: Boolean = false, onlyVertex: Boolean = false) {
+        // Prepare gl
         if (once)
             VertexUtil.prepareGl()
+
+        // Draw the circle main function
         drawArcFilled(center, radius, angleRange, segments, color, onlyVertex)
+
+        // Release gl
         if (once)
             VertexUtil.releaseGL()
     }
     private fun drawArcFilled(center: Vec2f, radius: Float, angleRange: Pair<Float, Float>, segments: Int = 0, color: ABColor, onlyVertex: Boolean = false) {
+        // Get segments
         val arcVertices = getArcVertices(center, radius, angleRange, segments)
+        // Draw everything
         drawTriangleFan(center, arcVertices, color, false, onlyVertex)
     }
     private fun getArcVertices(center: Vec2f, radius: Float, angleRange: Pair<Float, Float>, segments: Int): Array<Vec2f> {
+        // I dunno what's here, some geometry stuff i guess. Thanks lambda
         val range = max(angleRange.first, angleRange.second) - min(angleRange.first, angleRange.second)
         val seg = calcSegments(segments, radius, range)
         val segAngle = (range / seg.toFloat())
@@ -205,6 +222,7 @@ object RenderUtil2d {
         }
     }
     private fun calcSegments(segmentsIn: Int, radius: Float, range: Float): Int {
+        // I dunno what's here, thanks lambda
         if (segmentsIn != -0) return segmentsIn
         val segments = radius * 0.5 * PI * (range / 360.0)
         return max(segments.roundToInt(), 16)
@@ -214,12 +232,17 @@ object RenderUtil2d {
     fun drawCircleFilled(center: Vec2f, radius: Float, segments: Int = 0, color: Array<ABColor>, angleRange: Pair<Float, Float> = Pair(0f, 360f), once: Boolean = false) {
 
         when (color.size) {
+            // No circle
             0 -> return
+            // 1 color circle
             1 -> drawCircleFilled(center, radius, segments, color[0], angleRange, once)
             else -> {
+                // Prepearel
                 if (once)
                     VertexUtil.prepareGl()
+                // Main function drawing circle
                 drawArcFilled(center, radius, angleRange, segments, color)
+                // Release
                 if (once)
                     VertexUtil.releaseGL()
             }
@@ -227,36 +250,57 @@ object RenderUtil2d {
         }
     }
     private fun drawArcFilled(center: Vec2f, radius: Float, angleRange: Pair<Float, Float>, segments: Int = 0, color: Array<ABColor>) {
+        // Get vertices
         val arcVertices = getArcVertices(center, radius, angleRange, segments)
-
+        // Draw
         drawTriangleFan(center, arcVertices, getGradientVertices(color, arcVertices), false)
     }
 
     fun getGradientVertices(color: Array<ABColor>, arcVertices: Array<Vec2f>) : ArrayList<ABColor> {
-        val pieces = arcVertices.size / (color.size.toFloat() - 1)
+        /*
+            There, we have to calculate for each vertices the relative color.
+         */
+        // First we have to understand the number od divisions (we remove 1 because the first color is at beginning)
+        val sizes = color.size.toInt() - 1
+        val pieces = arcVertices.size / (sizes.toFloat())
+        // Output
         var finalColors = arrayListOf<ABColor>()
         for (i in 0..color.size - 2) {
+            // Get rgba
             val red = color[i].red
             val blue = color[i].blue
             var green = color[i].green
             var alpha = color[i].alpha
+            // Here we have to take the percent of he changes
             val rChange = (color[i + 1].red - red)/pieces
             val gChange = (color[i + 1].green - green)/pieces
             val bChange = (color[i + 1].blue - blue)/pieces
             val aChange = (color[i + 1].alpha - alpha)/pieces
-            for(j in 0..pieces.toInt() - 1) {
+            // And for every piece
+            for(j in 0..sizes) {
+                // We add the relative color going percent (from 0% to 100%)
                 finalColors.add(ABColor(red + (rChange * j).toInt(), green + (gChange*j).toInt(), blue + (bChange*j).toInt(), alpha + (aChange*j).toInt()))
             }
 
         }
 
+        /*
+            For some reasons, sometimes, the number of colors is not excact the same.
+            We need it to be excact the same so, instead of debugging and making the entire
+            code above 1000 complex, i just hard patch it by adding/removing colors
+         */
+        // If we are above the limit
         if (finalColors.size > arcVertices.size) {
+            // Remove till it's the same
             while (finalColors.size != arcVertices.size)
                 finalColors.removeLast()
+        // If we are belove
         } else if (finalColors.size < arcVertices.size)
+            // Add the last color till it's the same
             while (finalColors.size != arcVertices.size)
                 finalColors.add(color[color.size - 1])
 
+        // Return output
         return finalColors
     }
 
@@ -276,14 +320,20 @@ object RenderUtil2d {
 
     // Gradient
     fun drawCircleOutline(center: Vec2f, radius: Float, segments: Int = 0, lineWidth: Float = 1f, color: Array<ABColor>, angleRange: Pair<Float, Float> = Pair(0f, 360f), once: Boolean = false) {
+        // Prepare gl
         if (once)
             VertexUtil.prepareGl()
+
+        // Main function drawing circle
         drawArcOutline(center, radius, angleRange, segments, lineWidth, color, once)
+        // Release gl
         if (once)
             VertexUtil.releaseGL()
     }
     private fun drawArcOutline( center: Vec2f, radius: Float, angleRange: Pair<Float, Float>, segments: Int = 0, lineWidth: Float = 1f, color: Array<ABColor>, once: Boolean = false) {
+        // Get vertices
         val arcVertices = getArcVertices(center, radius, angleRange, segments)
+        // Draw
         drawLineStrip(arcVertices, lineWidth, getGradientVertices(color, arcVertices), once)
     }
 
@@ -291,23 +341,31 @@ object RenderUtil2d {
     /// Border circle
     // Normal
     fun drawCircleBorder(center: Vec2f, radius: Float, segments: Int = 0, lineWidth: Float = 1f, insideC: ABColor, outsideC: ABColor, angleRange: Pair<Float, Float> = Pair(0f, 360f), once: Boolean = false) {
+        // Prepare gl
         if (once)
             VertexUtil.prepareGl()
 
+        // Draw inside
         drawCircleFilled(center, radius - lineWidth, segments, insideC, angleRange, false)
+        // Draw outside
         drawCircleOutline(center, radius, segments, lineWidth + 2, outsideC, angleRange, false)
 
+        // Release
         if (once)
             VertexUtil.releaseGL()
     }
     // Gradient
     fun drawCircleBorder(center: Vec2f, radius: Float, segments: Int = 0, lineWidth: Float = 1f, insideC: Array<ABColor>, outsideC: Array<ABColor>, angleRange: Pair<Float, Float> = Pair(0f, 360f), once: Boolean = false) {
+        // Prepare gl
         if (once)
             VertexUtil.prepareGl()
 
+        // Inside
         drawCircleFilled(center, radius - lineWidth, segments, insideC, angleRange, false)
+        // Outside
         drawCircleOutline(center, radius - lineWidth/2 - .5f, segments, lineWidth + 2, outsideC, angleRange, false)
 
+        // Relase gl
         if (once)
             VertexUtil.releaseGL()
     }
@@ -349,6 +407,7 @@ object RenderUtil2d {
             0 -> return
             1 -> drawRoundedRect(Start, width, height, radius, colors[0], once)
             else -> {
+                // Prepare gl
                 if (once)
                     VertexUtil.prepareGl()
 
@@ -380,8 +439,6 @@ object RenderUtil2d {
                 // Bottom right
                 drawCircleFilled(Start.add(width - radius, height - radius), radius, 90, arr[2], Pair(90f, 180f), false)
 
-
-
                 /*
                     Old rounded rect. This doesnt really work, it create some shits render bugs
                 /// Body
@@ -396,6 +453,7 @@ object RenderUtil2d {
                 // Bottom left
                 drawCircleFilled(Start.add(radius, height - radius), radius, 90, arr[3], Pair(180f, 270f), false, true)
                 glEnd()*/
+                // Relase gl
                 if (once)
                     VertexUtil.releaseGL()
                 }
@@ -482,7 +540,9 @@ object RenderUtil2d {
     fun drawRoundedRectBorder(Start: Vec2f, width: Float, height: Float, radius: Float, widthBorder: Float, cInside: ABColor, cOutside: ABColor, once: Boolean = false) {
         if (once)
             VertexUtil.prepareGl()
+        // Inside
         drawRoundedRect(Start, width, height, radius, cInside)
+        // Outside
         drawRoundedRectOutline(Start, width, height, radius, widthBorder, cOutside)
         if (once)
             VertexUtil.releaseGL()
@@ -491,8 +551,9 @@ object RenderUtil2d {
     fun drawRoundedRectBorder(Start: Vec2f, width: Float, height: Float, radius: Float, widthBorder: Float, cInside: Array<ABColor>, insideTopBottom: Boolean = false, cOutside: Array<ABColor>, outsideTopBottom: Boolean = false, once: Boolean = false) {
         if (once)
             VertexUtil.prepareGl()
-        // Start: Vec2f, width: Float, height: Float, radius: Float, colors: Array<ABColor>, once: Boolean = false, topBottom: Boolean = false
+        // Inside
         drawRoundedRect(Start.add(widthBorder/2 - .8f, widthBorder/2 - .8f), width - widthBorder + 1.2f, height - widthBorder + 1.2f, radius, cInside, once, insideTopBottom)
+        // Outside
         drawRoundedRectOutline(Start, width, height, radius, widthBorder, cOutside, outsideTopBottom, once)
         if (once)
             VertexUtil.releaseGL()
@@ -504,10 +565,14 @@ object RenderUtil2d {
     //region line
 
     fun drawLineStrip(vertices: Array<Vec2f>, lineWidth: Float = 1f, c: ABColor, once: Boolean = false) {
+        // Prepare gl
         if (once)
             VertexUtil.prepareGl()
+
+        // Set width
         glLineWidth(lineWidth)
 
+        // Set color and add vertices
         glBegin(GL_LINE_STRIP)
         c.glColor()
         for (vertex in vertices) {
@@ -515,57 +580,71 @@ object RenderUtil2d {
         }
         glEnd()
 
+        // Relase gl
         if (once)
             VertexUtil.releaseGL()
         else
+            // Well, we still have to reset lineWidth lol
             glLineWidth(1f)
     }
 
     fun drawLineStrip(vertices: Array<Vec2f>, lineWidth: Float = 1f, c: ArrayList<ABColor>, once: Boolean = false) {
+        // PrepareGl
         if (once)
             VertexUtil.prepareGl()
+        // Set lineWidth
         glLineWidth(lineWidth)
 
+        // Add every vertices with color
         glBegin(GL_LINE_STRIP)
         for ((idx, value) in vertices.withIndex()) {
             VertexUtil.add(value, c[idx])
         }
         glEnd()
 
+        // Relase
         if (once)
             VertexUtil.releaseGL()
         else
+            // Reset
             glLineWidth(1f)
     }
 
     fun drawLine(start: Vec2f, end: Vec2f, lineWidth: Float = 1f, c: ABColor, once: Boolean = false) {
+        // Preare gl
         if (once) {
             VertexUtil.prepareGl()
         }
 
+        // Set width
         glLineWidth(lineWidth)
+        // Set color and start+end
         glBegin(GL_LINES)
         c.glColor()
         glVertex2f(start.x, start.y)
         glVertex2f(end.x, end.y)
         glEnd()
 
+        // End + reset
         if (once) {
             VertexUtil.releaseGL()
         } else  glLineWidth(1f)
     }
 
     fun drawLine(start: Vec2f, end: Vec2f, lineWidth: Float = 1f, first: ABColor, second: ABColor, once: Boolean = false) {
+        // Prepare
         if (once) {
             VertexUtil.prepareGl()
         }
 
+        // Draw a line with 2 differents color
         glLineWidth(lineWidth)
         glBegin(GL_LINES)
         VertexUtil.add(start, first)
         VertexUtil.add(end, second)
         glEnd()
 
+        // Release + reset
         if (once) {
             VertexUtil.releaseGL()
         } else  glLineWidth(1f)
@@ -574,24 +653,30 @@ object RenderUtil2d {
     fun drawLine(start: Vec2f, end: Vec2f, lineWidth: Float = 1f, c: Array<ABColor>, once: Boolean = false) {
 
         when(c.size) {
+            // NO colors lol
             0 -> return
+            // 1 color, simple lol
             1 -> drawLine(start, end, lineWidth, c[0], once)
+            // 2 colors, simple lo
             2 -> drawLine(start, end, lineWidth, c[0], c[1], once)
             else -> {
+                // Prepare
                 if (once) {
                     VertexUtil.prepareGl()
                 }
 
+                // Get the differences of every lines
                 val size = c.size - 1
                 val lines = ArrayList<Vec2f>()
                 val xDiff = (end.x - start.x)/size
                 val yDiff = (end.y - start.y)/size
 
+                // Add with percent
                 for(i in 0..size) {
                     lines.add(start.add(xDiff*i, yDiff*i))
                 }
 
-
+                // Simple line draw
                 glLineWidth(lineWidth)
                 glBegin(GL_LINE_STRIP)
 
@@ -601,6 +686,7 @@ object RenderUtil2d {
 
                 glEnd()
 
+                // Release
                 if (once) {
                     VertexUtil.releaseGL()
                 } else  glLineWidth(1f)
@@ -612,6 +698,10 @@ object RenderUtil2d {
     //endregion
 
     //region Triangle
+
+    /*
+        Is this ever going to be used?
+     */
 
     private fun drawTriangleFan(center: Vec2f, vertices: Array<Vec2f>, c: ABColor, once: Boolean = false, onlyVertex: Boolean = false) {
         if (once)
@@ -654,36 +744,47 @@ object RenderUtil2d {
      */
     fun drawText(text: String, x: Float, y: Float, color: ABColor, justify: Int = 0, fontSize : Float = -1f) {
 
+        // We are not going to waste resources for no lenght ofc
         if (text.length == 0)
             return
 
+        // Get justify
         var xVal = when(justify) {
             1 -> x - mc.fontRenderer.getStringWidth(text) / 2
             2 -> x - mc.fontRenderer.getStringWidth(text)
             else -> x
         };
 
+        // Temp variable for size
         var sizeNow = false
 
+        // Size
         if (fontSize != -1f) {
             GlStateManager.pushMatrix()
             GlStateManager.scale(fontSize, fontSize, fontSize)
             sizeNow = true
         }
 
+        // Draw simple
         mc.fontRenderer.drawString( text, xVal.toInt(), y.toInt(), color.rgb);
 
+        // Reset
         if (sizeNow)
             GlStateManager.popMatrix()
     }
 
+    // Our custom gradient
     val renderString = GradientFontRenderer(mc.gameSettings, ResourceLocation("minecraft", "textures/font/ascii.png"), mc.renderEngine, false)
 
+    // Draw with N colors
     fun drawText(text: String, x:Float, y:Float, c: Array<ABColor>, justify: Int = 0, fontSize: Float = -1f, horizontal: Boolean = true, dropShadow: Boolean = false) {
         when(c.size) {
+            // As usual
             0 -> return
             1 -> drawText(text, x, y, c[0], justify, fontSize)
+            // 2 colors
             2 -> {
+                // Not going to waste
                 if (text.length == 0)
                     return
 
@@ -701,7 +802,7 @@ object RenderUtil2d {
                     sizeNow = true
                 }
 
-
+                // Draw string with 2 colors
                 renderString.drawString( text, xVal, y, c[0].rgb, c[1].rgb, dropShadow, horizontal);
 
                 if (sizeNow)
@@ -715,65 +816,73 @@ object RenderUtil2d {
                 if (start == 0)
                     return
 
+                // Drop in case colors are more then letters (I'm not going to overcomplicate this shit and making pixel things)
                 c.dropLastWhile {
                     c.size > start
                 }
 
+                // We have to get every string with start end colors
                 val stringSplitted = ArrayList<String>()
+                // We remove 1 because the first color is at beginning
                 var nColors = c.size.toFloat() - 1
 
+                // Temp variable
                 var textMod = text
 
+                // While we have lenght
                 while (start > 0) {
+                    // Get nWords we are going to color
                     var nWords : Float = start / nColors
+                    // If there is decimal, add 1
                     if (!nWords.rem(1).equals(0f))
                         nWords++
 
+                    // Add substring
                     stringSplitted.add(textMod.substring(0..nWords.toInt() - 1))
 
+                    // Remove what we added
                     textMod = textMod.substring(nWords.toInt())
 
+                    // Decrease start by the number of words and nColors
                     start -= nWords.toInt()
                     nColors--
 
                 }
 
-
+                // Justify
                 var xVal = when(justify) {
                     1 -> x - mc.fontRenderer.getStringWidth(text) / 2
                     2 -> x - mc.fontRenderer.getStringWidth(text)
                     else -> x
                 };
-                var addX : Float = 0f
+                // We have to remember the width of every string
+                var addX = 0f
 
                 var sizeNow = false
 
+                // Scale
                 if (sizeNow) {
                     GlStateManager.pushMatrix()
                     GlStateManager.scale(fontSize, fontSize, fontSize)
                     sizeNow = true
                 }
 
+                // For every string
                 for((idx, value) in stringSplitted.withIndex()) {
 
+                    // Draw it form start to finish
                     renderString.drawString( value, xVal + addX, y, c[idx].rgb, c[idx + 1].rgb, dropShadow, horizontal);
 
+                    // Add width
                     addX += renderString.getStringWidth(value)
 
                 }
 
+                // Reset
                 if (sizeNow)
                     GlStateManager.popMatrix()
             }
         }
-    }
-
-    private fun drawHelloTextWithGradient(x: Int, y: Int, topColor: Int, bottomColor: Int, gradientFontRenderer : GradientFontRenderer, text: String) {
-        drawCenteredGradientString(gradientFontRenderer, text, x, y - 4, topColor, bottomColor)
-    }
-
-    fun drawCenteredGradientString(fontRendererIn: GradientFontRenderer, text: String, x: Int, y: Int, color: Int, colorBottom: Int) {
-        fontRendererIn.drawString(text, (x - fontRendererIn.getStringWidth(text) / 2).toFloat(), y.toFloat(), color, colorBottom, false, true)
     }
 
     //endregion
@@ -786,24 +895,31 @@ object RenderUtil2d {
     //mc.ingameGUI.drawTexturedModalRect(x, y, 0, 0, br.width, br.height)
 
     fun showPicture(x: Int, y: Int, resourceLocation: ResourceLocation, width: Int = -1, height: Int = -1) {
-        GL11.glPushMatrix()
-        GL11.glColor4f(1f, 1f, 1f, 1f)
         mc.textureManager.bindTexture(resourceLocation)
+        // Get final width
         var widthFinal = width
         var heightFinal = height
+        // If we have to get the width of something
         if (width == -1 || height == -1) {
+            // Read the resource
             val br = ImageIO.read(mc.resourceManager.getResource(resourceLocation).inputStream)
+            // And them get width / height in case is not default
             if (width == -1)
                 widthFinal = br.width
             if (height == -1)
                 heightFinal = br.height
         }
 
+        GL11.glPushMatrix()
+        // Reset color
+        GL11.glColor4f(1f, 1f, 1f, 1f)
+        // Draw it
         blit(x, y, 0f, 0f, widthFinal, heightFinal, widthFinal.toFloat(), heightFinal.toFloat())
         GL11.glPopMatrix()
     }
 
     fun showPicture(x: Int, y: Int, resourceLocation: ResourceLocation, width: Int = -1, height: Int = -1, color: ABColor) {
+        // Like before
         mc.textureManager.bindTexture(resourceLocation)
         var widthFinal = width
         var heightFinal = height
@@ -816,6 +932,7 @@ object RenderUtil2d {
         }
 
         GL11.glPushMatrix();
+        // Custom color
         color.glColor()
         blit(x, y, 0f, 0f, widthFinal, heightFinal, widthFinal.toFloat(), heightFinal.toFloat())
         GL11.glPopMatrix();

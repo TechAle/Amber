@@ -30,7 +30,6 @@ object testRendering : Module(category = Category.Client, "testRendering", true)
         RenderUtil2d.showPicture(350, 50, ResourceLocation("amber/img/logogradient.png"), 100, 100)
         // Color
         RenderUtil2d.showPicture(350, 200, ResourceLocation("amber/img/logowhite.png"), 50, 50, ABColor(0, 255, 255))
-
         VertexUtil.prepareGl()
         /// Rect
         // Normal rect
