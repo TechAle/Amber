@@ -786,6 +786,8 @@ object RenderUtil2d {
     //mc.ingameGUI.drawTexturedModalRect(x, y, 0, 0, br.width, br.height)
 
     fun showPicture(x: Int, y: Int, resourceLocation: ResourceLocation, width: Int = -1, height: Int = -1) {
+        GL11.glPushMatrix()
+        GL11.glColor4f(1f, 1f, 1f, 1f)
         mc.textureManager.bindTexture(resourceLocation)
         var widthFinal = width
         var heightFinal = height
@@ -798,6 +800,7 @@ object RenderUtil2d {
         }
 
         blit(x, y, 0f, 0f, widthFinal, heightFinal, widthFinal.toFloat(), heightFinal.toFloat())
+        GL11.glPopMatrix()
     }
 
     fun showPicture(x: Int, y: Int, resourceLocation: ResourceLocation, width: Int = -1, height: Int = -1, color: ABColor) {
