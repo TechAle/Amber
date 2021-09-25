@@ -14,7 +14,7 @@ import net.minecraft.util.math.Vec2f
  * @author TechAle
  * @since 12/09/21
  */
-object testRendering : Module(category = Category.Client, "testRendering", true) {
+object testRendering : Module(category = Category.Client, "testRendering", false) {
 
     override fun onRender() {
 

@@ -733,6 +733,39 @@ object RenderUtil2d {
             VertexUtil.releaseGL()
     }
 
+    public fun drawTriangle(pos1: Vec2f, pos2: Vec2f, pos3: Vec2f, c: ABColor, once: Boolean = false) {
+        if (once)
+            VertexUtil.prepareGl()
+
+        glBegin(GL_TRIANGLES)
+        c.glColor()
+        VertexUtil.add(pos1)
+        VertexUtil.add(pos2)
+        VertexUtil.add(pos3)
+        glEnd()
+
+        if (once)
+            VertexUtil.prepareGl()
+    }
+
+    public fun drawTriangle(pos1: Vec2f, pos2: Vec2f, pos3: Vec2f, c: Array<ABColor>, once: Boolean = false) {
+        if (c.size != 3)
+            return
+
+        if (once)
+            VertexUtil.prepareGl()
+
+        glBegin(GL_TRIANGLES)
+        VertexUtil.add(pos1, c[0])
+        VertexUtil.add(pos2, c[1])
+        VertexUtil.add(pos3, c[2])
+        glEnd()
+
+        if (once)
+            VertexUtil.prepareGl()
+
+    }
+
     //endregion
 
     //region Text
@@ -742,7 +775,7 @@ object RenderUtil2d {
         1 -> Center
         2 -> Right
      */
-    fun drawText(text: String, x: Float, y: Float, color: ABColor, justify: Int = 0, fontSize : Float = -1f) {
+    fun drawText(text: String, x: Float, y: Float, color: ABColor, justify: Int = 0, fontSize : Float = 1f) {
 
         // We are not going to waste resources for no lenght ofc
         if (text.length == 0)
@@ -759,14 +792,14 @@ object RenderUtil2d {
         var sizeNow = false
 
         // Size
-        if (fontSize != -1f) {
+        if (fontSize != 1f) {
             GlStateManager.pushMatrix()
             GlStateManager.scale(fontSize, fontSize, fontSize)
             sizeNow = true
         }
 
         // Draw simple
-        mc.fontRenderer.drawString( text, xVal.toInt(), y.toInt(), color.rgb);
+        mc.fontRenderer.drawString( text, (xVal/fontSize).toInt(), (y/fontSize).toInt(), color.rgb);
 
         // Reset
         if (sizeNow)

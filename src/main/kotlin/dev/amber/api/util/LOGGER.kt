@@ -47,6 +47,7 @@ object LOGGER {
         override fun format(record: LogRecord): String {
             val builder = StringBuilder(1000)
             builder.append("[").append(df.format(Date(record.millis))).append("] ")
+            builder.append("[Amber] ")
             builder.append("[").append(record.level).append("] ")
             builder.append(formatMessage(record))
             builder.append("\n")
