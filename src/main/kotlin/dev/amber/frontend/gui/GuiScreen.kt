@@ -96,48 +96,29 @@ class GuiScreen : GuiScreen() {
         // Rect under the picture
         RenderUtil2d.drawRect(
                 Start = Vec2f.ZERO,
-                width = 61f,
-                height = 50f,
+                width = 154f,
+                height = 60f,
                 c = ABColor(0,0,0, 180)
         )
-        GlStateManager.pushMatrix()
-        GL11.glScalef(1f, .4f, 1f)
-        // Circle belove
-        RenderUtil2d.drawCircleBorder(
-                center = Vec2f(0f, 125f),
-                radius = 63f,
-                segments = 1000,
-                insideC = arrayOf(ABColor(0, 0, 0, 180)),
-                outsideC = arrayOf(ABColor(0, 0, 0), ABColor(255, 0, 0)),
-                angleRange = Pair(90f, 180f))
-        GlStateManager.popMatrix()
         // Border rectangle
         RenderUtil2d.drawRect(
-                Start = Vec2f(61f, 48f),
-                width = 93f,
+                Start = Vec2f(0f, 58f),
+                width = 154f,
                 height = 2f,
                 c = ABColor(255, 0, 0)
-        )
-
-        // Inside rectangle
-        RenderUtil2d.drawRect(
-                Start = Vec2f(61f, 0f),
-                width = 93f,
-                height = 48f,
-                c = ABColor(0, 0,0, 180)
         )
 
         // Triangle
         RenderUtil2d.drawTriangle(
                 pos1 = Vec2f(154f, 0f),
-                pos2 = Vec2f(154f, 48f),
+                pos2 = Vec2f(154f, 58f),
                 pos3 = Vec2f(175f, 0f),
                 ABColor(0, 0, 0, 180)
         )
 
         // Above triangle
         RenderUtil2d.drawLine(
-                start = Vec2f(154f, 49f),
+                start = Vec2f(154f, 59f),
                 end = Vec2f(175f, 0f),
                 c = ABColor(255, 0, 0),
                 lineWidth = 3f
@@ -147,13 +128,13 @@ class GuiScreen : GuiScreen() {
         VertexUtil.releaseGL()
         // Amber picture
         RenderUtil2d.showPicture(x = 5, y = 5,
-                                 resourceLocation = ResourceLocation("amber/img/logogradient.png"),
-                                 width = 45, height = 45)
+                resourceLocation = ResourceLocation("amber/img/logogradient.png"),
+                width = 47, height = 45)
 
         // Tecture
         RenderUtil2d.drawText(text = "Amber", x = 60f, y= 16f,
-                              color = ABColor(255, 255, 255),
-                              fontSize = 3f)
+                color = ABColor(255, 255, 255),
+                fontSize = 3f)
 
         // Prepare gl again
         VertexUtil.prepareGl()
@@ -201,3 +182,261 @@ class GuiScreen : GuiScreen() {
 data class Categories(var name: Module.Category, val x: Int)
 
 data class Modules(var module: Module, val y: Int, var category: Module.Category)
+
+
+/// In mememory of every sketches
+// Watermark
+/*
+    First scatch watermark
+    // Prepare opengGL
+    VertexUtil.prepareGl()
+    // Rect under the picture
+    RenderUtil2d.drawRect(
+            Start = Vec2f.ZERO,
+            width = 61f,
+            height = 50f,
+            c = ABColor(0,0,0, 180)
+    )
+    GlStateManager.pushMatrix()
+    GL11.glScalef(1f, .4f, 1f)
+    // Circle belove
+    RenderUtil2d.drawCircleBorder(
+            center = Vec2f(0f, 125f),
+            radius = 63f,
+            segments = 1000,
+            insideC = arrayOf(ABColor(0, 0, 0, 180)),
+            outsideC = arrayOf(ABColor(0, 0, 0), ABColor(255, 0, 0)),
+            angleRange = Pair(90f, 180f))
+    GlStateManager.popMatrix()
+    // Border rectangle
+    RenderUtil2d.drawRect(
+            Start = Vec2f(61f, 48f),
+            width = 93f,
+            height = 2f,
+            c = ABColor(255, 0, 0)
+    )
+
+    // Inside rectangle
+    RenderUtil2d.drawRect(
+            Start = Vec2f(61f, 0f),
+            width = 93f,
+            height = 48f,
+            c = ABColor(0, 0,0, 180)
+    )
+
+    // Triangle
+    RenderUtil2d.drawTriangle(
+            pos1 = Vec2f(154f, 0f),
+            pos2 = Vec2f(154f, 48f),
+            pos3 = Vec2f(175f, 0f),
+            ABColor(0, 0, 0, 180)
+    )
+
+    // Above triangle
+    RenderUtil2d.drawLine(
+            start = Vec2f(154f, 49f),
+            end = Vec2f(175f, 0f),
+            c = ABColor(255, 0, 0),
+            lineWidth = 3f
+    )
+
+    // Release for showing the picture+text
+    VertexUtil.releaseGL()
+    // Amber picture
+    RenderUtil2d.showPicture(x = 5, y = 5,
+                             resourceLocation = ResourceLocation("amber/img/logogradient.png"),
+                             width = 45, height = 45)
+
+    // Tecture
+    RenderUtil2d.drawText(text = "Amber", x = 60f, y= 16f,
+                          color = ABColor(255, 255, 255),
+                          fontSize = 3f)
+
+    // Prepare gl again
+    VertexUtil.prepareGl()
+ */
+/*
+    Second sketch watermark
+
+    // Prepare opengGL
+    VertexUtil.prepareGl()
+    // Rect under the picture
+    RenderUtil2d.drawRect(
+            Start = Vec2f.ZERO,
+            width = 61f,
+            height = 50f,
+            c = ABColor(0,0,0, 180)
+    )
+    GlStateManager.pushMatrix()
+    GL11.glScalef(1f, .4f, 1f)
+    // Circle belove
+    RenderUtil2d.drawCircleBorder(
+            center = Vec2f(0f, 125f),
+            radius = 63f,
+            segments = 1000,
+            insideC = arrayOf(ABColor(0, 0, 0, 180)),
+            outsideC = arrayOf(ABColor(0, 0, 0), ABColor(255, 0, 0)),
+            angleRange = Pair(90f, 180f))
+    GlStateManager.popMatrix()
+    // Border rectangle
+    RenderUtil2d.drawRect(
+            Start = Vec2f(61f, 48f),
+            width = 73f,
+            height = 2f,
+            c = ABColor(255, 0, 0)
+    )
+
+    // Inside rectangle
+    RenderUtil2d.drawRect(
+            Start = Vec2f(61f, 0f),
+            width = 93f,
+            height = 48f,
+            c = ABColor(0, 0,0, 180)
+    )
+
+    // Triangle
+    RenderUtil2d.drawTriangle(
+            pos1 = Vec2f(154f, 0f),
+            pos2 = Vec2f(154f, 48f),
+            pos3 = Vec2f(175f, 0f),
+            ABColor(0, 0, 0, 180)
+    )
+
+    // Release for showing the picture+text
+    VertexUtil.releaseGL()
+    // Amber picture
+    RenderUtil2d.showPicture(x = 5, y = 5,
+                             resourceLocation = ResourceLocation("amber/img/logogradient.png"),
+                             width = 45, height = 45)
+
+    // Tecture
+    RenderUtil2d.drawText(text = "Amber", x = 60f, y= 16f,
+                          color = ABColor(255, 255, 255),
+                          fontSize = 3f)
+
+    // Prepare gl again
+    VertexUtil.prepareGl()
+ */
+/*
+    Third sketch watermark
+    // Prepare opengGL
+    VertexUtil.prepareGl()
+    // Rect under the picture
+    RenderUtil2d.drawRect(
+            Start = Vec2f.ZERO,
+            width = 154f,
+            height = 60f,
+            c = ABColor(0,0,0, 180)
+    )
+    // Border rectangle
+    RenderUtil2d.drawRect(
+            Start = Vec2f(0f, 58f),
+            width = 154f,
+            height = 2f,
+            c = ABColor(255, 0, 0)
+    )
+
+    // Triangle
+    RenderUtil2d.drawTriangle(
+            pos1 = Vec2f(154f, 0f),
+            pos2 = Vec2f(154f, 58f),
+            pos3 = Vec2f(175f, 0f),
+            ABColor(0, 0, 0, 180)
+    )
+
+    // Above triangle
+    RenderUtil2d.drawLine(
+            start = Vec2f(154f, 59f),
+            end = Vec2f(175f, 0f),
+            c = ABColor(255, 0, 0),
+            lineWidth = 3f
+    )
+
+    // Release for showing the picture+text
+    VertexUtil.releaseGL()
+    // Amber picture
+    RenderUtil2d.showPicture(x = 5, y = 5,
+            resourceLocation = ResourceLocation("amber/img/logogradient.png"),
+            width = 45, height = 45)
+
+    // Tecture
+    RenderUtil2d.drawText(text = "Amber", x = 60f, y= 16f,
+            color = ABColor(255, 255, 255),
+            fontSize = 3f)
+
+    // Prepare gl again
+    VertexUtil.prepareGl()
+ */
+/*
+    Four sketch watermark
+    // Prepare opengGL
+    VertexUtil.prepareGl()
+    // Rect under the picture
+    RenderUtil2d.drawRect(
+            Start = Vec2f.ZERO,
+            width = 61f,
+            height = 50f,
+            c = ABColor(0,0,0, 180)
+    )
+
+    RenderUtil2d.drawTriangle(
+            pos1 = Vec2f(0f, 50f),
+            pos2 = Vec2f(61f, 50f),
+            pos3 = Vec2f(0f, 90f),
+            c = ABColor(0, 0, 0, 180)
+    )
+
+    RenderUtil2d.drawLine(
+            start = Vec2f(0f, 90f),
+            end = Vec2f(61f, 49f),
+            c = ABColor(255, 0, 0),
+            lineWidth = 3f
+    )
+
+    // Border rectangle
+    RenderUtil2d.drawRect(
+            Start = Vec2f(61f, 48f),
+            width = 83f,
+            height = 2f,
+            c = ABColor(255, 0, 0)
+    )
+
+    // Inside rectangle
+    RenderUtil2d.drawRect(
+            Start = Vec2f(61f, 0f),
+            width = 83f,
+            height = 48f,
+            c = ABColor(0, 0,0, 180)
+    )
+
+    // Triangle
+    RenderUtil2d.drawTriangle(
+            pos1 = Vec2f(144f, 0f),
+            pos2 = Vec2f(144f, 48f),
+            pos3 = Vec2f(175f, 0f),
+            ABColor(0, 0, 0, 180)
+    )
+
+    // Above triangle
+    RenderUtil2d.drawLine(
+            start = Vec2f(144f, 49f),
+            end = Vec2f(175f, 0f),
+            c = ABColor(255, 0, 0),
+            lineWidth = 3f
+    )
+
+    // Release for showing the picture+text
+    VertexUtil.releaseGL()
+    // Amber picture
+    RenderUtil2d.showPicture(x = 5, y = 5,
+            resourceLocation = ResourceLocation("amber/img/logogradient.png"),
+            width = 45, height = 45)
+
+    // Tecture
+    RenderUtil2d.drawText(text = "Amber", x = 60f, y= 16f,
+            color = ABColor(255, 255, 255),
+            fontSize = 3f)
+
+    // Prepare gl again
+    VertexUtil.prepareGl()
+ */
