@@ -8,11 +8,13 @@ import dev.amber.backend.managers.list.ModuleManager.modules
 import dev.amber.frontend.module.Module
 import dev.amber.frontend.module.modules.client.GUIModule
 import net.minecraft.client.gui.GuiScreen
+import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.math.Vec2f
 import org.lwjgl.opengl.GL11
 import java.awt.Color
+import kotlin.math.sin
 
 /**
  * @author A2H
@@ -21,13 +23,9 @@ class GuiScreen : GuiScreen() {
 
     private val categoriesList = arrayListOf<Categories>()
     private val moduleList = arrayListOf<Modules>()
-    private var lmClicked = false
-    private var rmClicked = false
-    private var y = 3
-    private val w = 105
-    private var h = 15
 
     init {
+        /*
         var xOffset = 3
         Module.Category.values().forEach { category ->
             if (category == Module.Category.HUD) return@forEach
@@ -40,7 +38,7 @@ class GuiScreen : GuiScreen() {
                     moduleList.add(Modules(module, yOffset, module.category))
                 }
             }
-        }
+        }*/
     }
 
     override fun doesGuiPauseGame(): Boolean {
@@ -144,9 +142,44 @@ class GuiScreen : GuiScreen() {
     // Just draw the animations on the bottom of the gui
     private fun drawBottom() {
 
+        drawDynamicBox()
 
         // Release openGl
         VertexUtil.releaseGL()
+    }
+
+    private var timer = 0.0
+    private val speed = .02
+    private val staticColorHeight = 10f
+    private val addHeight = 60f
+    private val varHeight = 10f
+    private val startAlpha = 255
+    private val finalAlpha = 50
+
+    private fun drawDynamicBox() {
+        // Get size of window
+        val width = ScaledResolution(mc).getScaledWidth().toFloat()
+        val height = ScaledResolution(mc).getScaledHeight().toFloat()
+
+        val nowHeight = sin(timer) * varHeight
+
+        val startHeight = height - staticColorHeight
+        val addEndHeight = addHeight - nowHeight
+        val endHeight = startHeight - addHeight
+        val nowFinalHeight = startHeight - addEndHeight
+
+        val alpha = (nowFinalHeight - startHeight) / (endHeight - startHeight)
+        val finalAlphaEnd = (startAlpha - (startAlpha - finalAlpha)*alpha).toInt()
+
+
+        val startColor = ABColor(0, 0, 255, startAlpha)
+        val endColor = ABColor(0, 50, 255, finalAlphaEnd)
+
+        RenderUtil2d.drawRect(Vec2f(0f, height), width, -staticColorHeight, startColor)
+        RenderUtil2d.drawRect(Vec2f(0f, startHeight), width, -addEndHeight.toFloat(), false,
+                arrayOf(startColor, endColor), true)
+
+        timer += speed
     }
 
     override fun mouseClicked(mouseX: Int, mouseY: Int, mouseButton: Int) {
