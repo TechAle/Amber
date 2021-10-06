@@ -15,4 +15,12 @@ object MathUtils {
         return round(value * scale) / scale
     }
 
+    fun percentage(start: Int, end: Int, now: Int) : Float {
+        return (now - start) / (end - start).toFloat()
+    }
+
+    fun percentage(start: Float, end: Float, now: Float) : Float {
+        return (now - start) / (end - start)
+    }
+
 }

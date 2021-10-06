@@ -2,18 +2,15 @@ package dev.amber.client.gui
 
 import dev.amber.api.render.RenderUtil2d
 import dev.amber.api.render.VertexUtil
+import dev.amber.api.util.MathUtils
 import dev.amber.api.util.MessageUtil
 import dev.amber.api.variables.ABColor
-import dev.amber.backend.managers.list.ModuleManager.modules
 import dev.amber.frontend.module.Module
 import dev.amber.frontend.module.modules.client.GUIModule
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.gui.ScaledResolution
-import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.math.Vec2f
-import org.lwjgl.opengl.GL11
-import java.awt.Color
 import kotlin.math.sin
 
 /**
@@ -142,10 +139,47 @@ class GuiScreen : GuiScreen() {
     // Just draw the animations on the bottom of the gui
     private fun drawBottom() {
 
-        drawDynamicBox()
+        drawDynamicBoxes()
 
         // Release openGl
         VertexUtil.releaseGL()
+    }
+
+    private val number = 5
+    private val differenceSpeed = 0.2
+    private fun drawDynamicBoxes() {
+        // Get size of window
+        val width = ScaledResolution(mc).scaledWidth.toFloat()
+        val height = ScaledResolution(mc).scaledHeight.toFloat()
+        if (number <= 2)
+            drawDynamicBox(height, 0f, width, differenceSpeed)
+        else {
+
+            val space = width / number
+            var x = 0f
+            val middleBox: Boolean
+            var numbers = number
+            if (numbers % 2 == 1) {
+                numbers -= 1
+                middleBox = true
+            } else middleBox = false
+
+            for(i in 0..numbers/2) {
+                drawDynamicBox(height, x, space, differenceSpeed * i)
+                x += space
+            }
+
+            if (middleBox) {
+                drawDynamicBox(height, x, space, differenceSpeed * numbers / 2 + differenceSpeed)
+                x += space
+            }
+
+            for(i in numbers/2 downTo 0 step 1) {
+                drawDynamicBox(height, x, space, differenceSpeed * i)
+                x += space
+            }
+
+        }
     }
 
     private var timer = 0.0
@@ -153,30 +187,33 @@ class GuiScreen : GuiScreen() {
     private val staticColorHeight = 10f
     private val addHeight = 60f
     private val varHeight = 10f
+    private val staticAlpha = 255
     private val startAlpha = 255
-    private val finalAlpha = 50
+    private val finalAlpha = 0
+    private val finalAlphaAnimation = false
+    private fun drawDynamicBox(heightWindow: Float, x: Float, width: Float, differenceSpeed: Double) {
 
-    private fun drawDynamicBox() {
-        // Get size of window
-        val width = ScaledResolution(mc).getScaledWidth().toFloat()
-        val height = ScaledResolution(mc).getScaledHeight().toFloat()
+        val nowHeight = sin(timer + differenceSpeed) * varHeight
 
-        val nowHeight = sin(timer) * varHeight
+        val finalAlphaNow: Float
+        val avgHeight = heightWindow - staticColorHeight
+        if (finalAlphaAnimation) {
+            val startHeight = avgHeight - varHeight
+            val endHeight = avgHeight + varHeight
+            val rnHeight = avgHeight + nowHeight.toFloat()
 
-        val startHeight = height - staticColorHeight
-        val addEndHeight = addHeight - nowHeight
-        val endHeight = startHeight - addHeight
-        val nowFinalHeight = startHeight - addEndHeight
+            val percent = MathUtils.percentage(startHeight, endHeight, rnHeight)
 
-        val alpha = (nowFinalHeight - startHeight) / (endHeight - startHeight)
-        val finalAlphaEnd = (startAlpha - (startAlpha - finalAlpha)*alpha).toInt()
+            val alpha = (startAlpha - finalAlpha) * percent
+            finalAlphaNow = startAlpha - alpha
+        } else finalAlphaNow = finalAlpha.toFloat()
+        // 240
+        val staticColor = ABColor(255, 50, 0, staticAlpha)
+        val startColor = ABColor(255, 50, 0, startAlpha)
+        val endColor = ABColor(255, 50, 0, finalAlphaNow.toInt())
 
-
-        val startColor = ABColor(0, 0, 255, startAlpha)
-        val endColor = ABColor(0, 50, 255, finalAlphaEnd)
-
-        RenderUtil2d.drawRect(Vec2f(0f, height), width, -staticColorHeight, startColor)
-        RenderUtil2d.drawRect(Vec2f(0f, startHeight), width, -addEndHeight.toFloat(), false,
+        RenderUtil2d.drawRect(Vec2f(x, heightWindow), width, -staticColorHeight, staticColor)
+        RenderUtil2d.drawRect(Vec2f(x, avgHeight), width, - addHeight - nowHeight.toFloat(), false,
                 arrayOf(startColor, endColor), true)
 
         timer += speed
