@@ -7,12 +7,10 @@ Techale is attempting to learn kotlin as he progresses with this utility mod. Wh
 |-------|
 | Techale |
 | Phantom826 |
-| Sable |
+| Sable__ |
 | Doogie13 |
 | Mwa |
 | SoggyBacco |
 | Soulbond |
 | MadHacker987 |
-| Aven |
-| D1snin|
-
+| ToxicAven |
