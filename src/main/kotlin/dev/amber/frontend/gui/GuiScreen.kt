@@ -146,7 +146,15 @@ class GuiScreen : GuiScreen() {
     }
 
     private val number = 5
-    private val differenceSpeed = 0.2
+    private val differenceSpeed = .3
+    private var timer = 0.0
+    private val speed = .005
+    private val staticColorHeight = 10f
+    private val addHeight = 60f
+    private val varHeight = 20f
+    private val startAlpha = 255
+    private val finalAlpha = 0
+    private val finalAlphaAnimation = true
     private fun drawDynamicBoxes() {
         // Get size of window
         val width = ScaledResolution(mc).scaledWidth.toFloat()
@@ -182,15 +190,6 @@ class GuiScreen : GuiScreen() {
         }
     }
 
-    private var timer = 0.0
-    private val speed = .02
-    private val staticColorHeight = 10f
-    private val addHeight = 60f
-    private val varHeight = 10f
-    private val staticAlpha = 255
-    private val startAlpha = 255
-    private val finalAlpha = 0
-    private val finalAlphaAnimation = false
     private fun drawDynamicBox(heightWindow: Float, x: Float, width: Float, differenceSpeed: Double) {
 
         val nowHeight = sin(timer + differenceSpeed) * varHeight
@@ -207,8 +206,8 @@ class GuiScreen : GuiScreen() {
             val alpha = (startAlpha - finalAlpha) * percent
             finalAlphaNow = startAlpha - alpha
         } else finalAlphaNow = finalAlpha.toFloat()
-        // 240
-        val staticColor = ABColor(255, 50, 0, staticAlpha)
+
+        val staticColor = ABColor(255, 50, 0, startAlpha)
         val startColor = ABColor(255, 50, 0, startAlpha)
         val endColor = ABColor(255, 50, 0, finalAlphaNow.toInt())
 
