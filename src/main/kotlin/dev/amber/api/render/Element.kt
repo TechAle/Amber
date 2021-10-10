@@ -1,9 +1,9 @@
 package dev.amber.api.render
 
-abstract class Element(x: Float, y: Float) {
+abstract class Element {
 
-    var x: Float = 0f
-    var y: Float = 0f
+    open var x: Float = 0f
+    open var y: Float = 0f
 
     fun Element(x: Int, y: Int) {
         this.x = x.toFloat()
@@ -15,6 +15,6 @@ abstract class Element(x: Float, y: Float) {
         this.y = y
     }
 
-    abstract fun render()
+    abstract fun render(): Boolean
 
 }

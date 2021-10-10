@@ -3,6 +3,7 @@ package dev.amber.client.gui
 import dev.amber.api.render.RenderUtil2d
 import dev.amber.api.render.VertexUtil
 import dev.amber.api.render.gui.background
+import dev.amber.api.util.Globals
 import dev.amber.api.util.MathUtils
 import dev.amber.api.util.MessageUtil
 import dev.amber.api.variables.ABColor
@@ -75,7 +76,6 @@ class GuiScreen : GuiScreen() {
         }
         lmClicked = false*/
 
-
         drawHeader()
 
 
@@ -97,9 +97,12 @@ class GuiScreen : GuiScreen() {
     // Just draw the animations on the bottom of the gui
     private fun drawBottom() {
 
-        background.drawParticles()
+        val width = ScaledResolution(Globals.mc).scaledWidth.toFloat()
+        val height = ScaledResolution(Globals.mc).scaledHeight.toFloat()
 
-        background.drawDynamicBoxes()
+        background.drawParticles(width, height)
+
+        background.drawDynamicBoxes(width, height)
 
         // Release openGl
         VertexUtil.releaseGL()

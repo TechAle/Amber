@@ -23,4 +23,8 @@ object MathUtils {
         return (now - start) / (end - start)
     }
 
+    fun Random(start: Float, end: Float) : Float {
+        return start + end * Math.random().toFloat()
+    }
+
 }

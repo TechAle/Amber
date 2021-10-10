@@ -2,13 +2,12 @@ package dev.amber.api.render.gui
 
 import dev.amber.api.render.RenderUtil2d
 import dev.amber.api.render.VertexUtil
-import dev.amber.api.util.Globals.mc
 import dev.amber.api.util.MathUtils
 import dev.amber.api.variables.ABColor
-import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.math.Vec2f
 import kotlin.math.sin
+import kotlin.random.Random
 
 object background {
 
@@ -65,25 +64,54 @@ object background {
     /// Bottom
 
     // Particles
-    fun drawParticles() {
+    private val particles = arrayListOf<particle>()
+    private val spawnParticles = 50
+    private val waitSpawn = 0
+    private val life = 100
+    private val variationLife = 100
+    private val startX = 0
+    private val endX = 0
+    private val variationY = 5
+    private const val speedY = 1f
+    private const val variationSpeedY = 2f
+    private var tick = 0
+    private val typeParticle = particle.type.STAR
+    private const val height = 3f
+    private const val width = 1f
+    private val primaryColor = ABColor(255, 100, 0)
+    private val secondaryColor = null
+    private val startAlphaParticle : Int? = 255
+    private val endAlphaParticle : Int? = 0
+    fun drawParticles(widthScreen: Float, heightScreen: Float) {
+
+        particles.removeIf { e -> e.render() }
+
+        if (tick++ > waitSpawn) {
+            tick = 0
+
+            for(i in 0..spawnParticles)
+                particles.add(particle(
+                        Random.nextInt(startX, widthScreen.toInt() - endX).toFloat(),
+                        Random.nextInt(heightScreen.toInt(), heightScreen.toInt() + variationY).toFloat(),
+                        MathUtils.Random(speedY, variationSpeedY), typeParticle, height, width, primaryColor, secondaryColor,
+                        Random.nextInt(life, life + variationLife), startAlphaParticle, endAlphaParticle))
+        }
 
     }
 
     // Header
-    private val number = 5
-    private val differenceSpeed = .3
+    private const val number = 5
+    private const val differenceSpeed = .3
     private var timer = 0.0
-    private val speed = .005
-    private val staticColorHeight = 10f
-    private val addHeight = 60f
-    private val varHeight = 20f
-    private val startAlpha = 255
-    private val finalAlpha = 0
-    private val finalAlphaAnimation = true
-    fun drawDynamicBoxes() {
+    private const val speed = .005
+    private const val staticColorHeight = 10f
+    private const val addHeight = 60f
+    private const val varHeight = 20f
+    private const val startAlpha = 255
+    private const val finalAlpha = 0
+    private const val finalAlphaAnimation = true
+    fun drawDynamicBoxes(width: Float, height: Float) {
         // Get size of window
-        val width = ScaledResolution(mc).scaledWidth.toFloat()
-        val height = ScaledResolution(mc).scaledHeight.toFloat()
         if (number == 0) {
             return
         } else
