@@ -46,7 +46,7 @@ object EventManager : manager {
     }
 
     private fun getProgress(): Float {
-        return Math.min((System.currentTimeMillis() - start) / (fadeTime.toFloat()), 1f)
+        return ((System.currentTimeMillis() - start) / (fadeTime.toFloat())).coerceAtMost(1f)
     }
 
     @SubscribeEvent

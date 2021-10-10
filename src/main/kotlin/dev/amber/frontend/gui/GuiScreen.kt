@@ -1,27 +1,22 @@
 package dev.amber.client.gui
 
-import dev.amber.api.render.RenderUtil2d
 import dev.amber.api.render.VertexUtil
-import dev.amber.api.render.gui.background
+import dev.amber.api.render.gui.Background
 import dev.amber.api.util.Globals
-import dev.amber.api.util.MathUtils
 import dev.amber.api.util.MessageUtil
-import dev.amber.api.variables.ABColor
 import dev.amber.frontend.module.Module
 import dev.amber.frontend.module.modules.client.GUIModule
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.gui.ScaledResolution
-import net.minecraft.util.ResourceLocation
-import net.minecraft.util.math.Vec2f
-import kotlin.math.sin
 
 /**
  * @author A2H
  */
 class GuiScreen : GuiScreen() {
 
+    /*
     private val categoriesList = arrayListOf<Categories>()
-    private val moduleList = arrayListOf<Modules>()
+    private val moduleList = arrayListOf<Modules>()*/
 
     init {
         /*
@@ -90,7 +85,7 @@ class GuiScreen : GuiScreen() {
         // Prepare opengGL
         VertexUtil.prepareGl()
 
-        background.drawLogo()
+        Background.drawLogo()
 
     }
 
@@ -100,9 +95,9 @@ class GuiScreen : GuiScreen() {
         val width = ScaledResolution(Globals.mc).scaledWidth.toFloat()
         val height = ScaledResolution(Globals.mc).scaledHeight.toFloat()
 
-        background.drawParticles(width, height)
+        Background.drawParticles(width, height)
 
-        background.drawDynamicBoxes(width, height)
+        Background.drawDynamicBoxes(width, height)
 
         // Release openGl
         VertexUtil.releaseGL()

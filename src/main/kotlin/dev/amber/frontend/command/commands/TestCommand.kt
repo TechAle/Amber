@@ -1,6 +1,6 @@
 package dev.amber.client.command.commands
 
-import dev.amber.client.command.Command
+import dev.amber.frontend.command.Command
 
 object TestCommand : Command(name = "TestCommand", "Syntax", "tst", "gg") {
 

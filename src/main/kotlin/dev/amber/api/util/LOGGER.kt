@@ -13,8 +13,8 @@ object LOGGER {
     private var time = hashMapOf<String, Long>()
 
     fun startTimer(name: String) {
-        time.put(name, System.currentTimeMillis())
-        info("Started timing process " + name)
+        time[name] = System.currentTimeMillis()
+        info("Started timing process $name")
     }
 
     fun endTimer(name: String) {
@@ -39,7 +39,7 @@ object LOGGER {
         val handler = ConsoleHandler()
         handler.formatter = formatter
 
-        log.addHandler(handler);
+        log.addHandler(handler)
     }
 
     // https://kodejava.org/how-do-i-create-a-custom-logger-formatter/

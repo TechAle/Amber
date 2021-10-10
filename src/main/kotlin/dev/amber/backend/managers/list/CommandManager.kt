@@ -4,7 +4,7 @@ import dev.amber.api.util.LOGGER
 import dev.amber.backend.events.core.EventTarget
 import dev.amber.backend.events.core.imp.Priority
 import dev.amber.backend.events.list.EventMessage
-import dev.amber.client.command.Command
+import dev.amber.frontend.command.Command
 import dev.amber.client.command.commands.TestCommand
 
 /*
@@ -45,7 +45,7 @@ object CommandManager : manager {
             // If not found
             if (!found) {
                 // Message help
-                System.out.println("Nothing found")
+                println("Nothing found")
             }
         }
     }

@@ -1,4 +1,4 @@
-package dev.amber.client
+package dev.amber.frontend
 
 import dev.amber.api.util.LOGGER
 import dev.amber.backend.events.core.EventHandler
@@ -34,7 +34,7 @@ class Amber {
         LOGGER.endTimer("Init Amber")
     }
 
-    fun loadManager(manager : manager) {
+    private fun loadManager(manager : manager) {
         EventHandler.register(manager)
         manager.onLoad()
     }

@@ -9,7 +9,7 @@ import net.minecraft.util.math.Vec2f
 import kotlin.math.sin
 import kotlin.random.Random
 
-object background {
+object Background {
 
     /// Header
     // Logo
@@ -66,9 +66,9 @@ object background {
     // Particles
     private val particles = arrayListOf<particle>()
     private const val spawnParticles = 5
-    private val waitSpawn = 1
-    private val life = 70
-    private val variationLife = 30
+    private const val waitSpawn = 1
+    private const val life = 70
+    private const val variationLife = 30
     private const val startX = 0
     private const val endX = 0
     private const val variationY = 5
@@ -110,12 +110,12 @@ object background {
     private const val finalAlphaAnimation = true
     fun drawDynamicBoxes(width: Float, height: Float) {
         // Get size of window
-        if (number == 0) {
-            return
-        } else
-            if (number <= 2)
-                drawDynamicBox(height, 0f, width, differenceSpeed)
-            else {
+        when {
+            number == 0 -> {
+                return
+            }
+            number <= 2 -> drawDynamicBox(height, 0f, width, differenceSpeed)
+            else -> {
 
                 val space = width / number
                 var x = 0f
@@ -142,6 +142,7 @@ object background {
                 }
 
             }
+        }
     }
 
     private fun drawDynamicBox(heightWindow: Float, x: Float, width: Float, differenceSpeed: Double) {
@@ -150,7 +151,7 @@ object background {
 
         val finalAlphaNow: Float
         val avgHeight = heightWindow - staticColorHeight
-        if (finalAlphaAnimation) {
+        finalAlphaNow = if (finalAlphaAnimation) {
             val startHeight = avgHeight - varHeight
             val endHeight = avgHeight + varHeight
             val rnHeight = avgHeight + nowHeight.toFloat()
@@ -158,8 +159,8 @@ object background {
             val percent = MathUtils.percentage(startHeight, endHeight, rnHeight)
 
             val alpha = (startAlpha - finalAlpha) * percent
-            finalAlphaNow = startAlpha - alpha
-        } else finalAlphaNow = finalAlpha.toFloat()
+            startAlpha - alpha
+        } else finalAlpha.toFloat()
 
         val staticColor = ABColor(255, 50, 0, startAlpha)
         val startColor = ABColor(255, 50, 0, startAlpha)

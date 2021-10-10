@@ -1,4 +1,4 @@
-package dev.amber.client.command
+package dev.amber.frontend.command
 
 /*
     @author TechAle
