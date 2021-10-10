@@ -65,23 +65,21 @@ object background {
 
     // Particles
     private val particles = arrayListOf<particle>()
-    private val spawnParticles = 50
-    private val waitSpawn = 0
-    private val life = 100
-    private val variationLife = 100
-    private val startX = 0
-    private val endX = 0
-    private val variationY = 5
+    private const val spawnParticles = 5
+    private val waitSpawn = 1
+    private val life = 70
+    private val variationLife = 30
+    private const val startX = 0
+    private const val endX = 0
+    private const val variationY = 5
     private const val speedY = 1f
-    private const val variationSpeedY = 2f
+    private const val variationSpeedY = 1f
     private var tick = 0
-    private val typeParticle = particle.type.STAR
+    private val typeParticle = particle.Type.SQUARE
     private const val height = 3f
-    private const val width = 1f
+    private const val width = 3f
     private val primaryColor = ABColor(255, 100, 0)
-    private val secondaryColor = null
     private val startAlphaParticle : Int? = 255
-    private val endAlphaParticle : Int? = 0
     fun drawParticles(widthScreen: Float, heightScreen: Float) {
 
         particles.removeIf { e -> e.render() }
@@ -93,8 +91,8 @@ object background {
                 particles.add(particle(
                         Random.nextInt(startX, widthScreen.toInt() - endX).toFloat(),
                         Random.nextInt(heightScreen.toInt(), heightScreen.toInt() + variationY).toFloat(),
-                        MathUtils.Random(speedY, variationSpeedY), typeParticle, height, width, primaryColor, secondaryColor,
-                        Random.nextInt(life, life + variationLife), startAlphaParticle, endAlphaParticle))
+                        MathUtils.random(speedY, variationSpeedY), typeParticle, height, width, primaryColor,
+                        Random.nextInt(life, life + variationLife), startAlphaParticle))
         }
 
     }
