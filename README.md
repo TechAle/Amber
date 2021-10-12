@@ -12,5 +12,4 @@ Techale is attempting to learn kotlin as he progresses with this utility mod. Wh
 | Mwa |
 | SoggyBacco |
 | Soulbond |
-| MadHacker987 |
 | ToxicAven |
